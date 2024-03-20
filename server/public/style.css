@@ -1,0 +1,38 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: azure;
+}
+
+main {
+  min-width: 500px;
+  max-width: 900px;
+  /* background-color: gray; */
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1em;
+}
+
+input {
+  width: 100%;
+  height: 3em;
+  padding-left: 1em;
+}
+
+button {
+  width: 100%;
+  padding: 0.5em;
+}
