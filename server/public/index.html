@@ -10,18 +10,47 @@
 
 <body>
   <main>
-    <a href="./chat.html">chat</a>
-    <form action="chat.html">
-      <input type="text" placeholder="Message">
-      <button type="submit">Send</button>
-    </form>
-    <section id="messages">
 
+    <head>
+      <h1>MyChat</h1>
+    </head>
+    <section id="login">
+      <h2>Login</h2>
+      <form>
+        <label for="email">
+          Email:
+          <input id="email" type="email" placeholder="Email">
+        </label>
+        <label for="password">
+          Password:
+          <input id="password" type="password" placeholder="Password">
+        </label>
+        <button type="submit">Login</button>
+      </form>
+      <p>
+        Need an account? <span id="signupLink">Sign up</span>
+      </p>
+    </section>
+    <section id="signup" class="dontShow">
+      <h2>Sign Up</h2>
+      <form>
+        <label for="email">
+          Email:
+          <input id="email" type="email" placeholder="Email">
+        </label>
+        <label for="password">
+          Password:
+          <input id="password" type="password" placeholder="Password">
+        </label>
+        <button type="submit">Sign Up</button>
+      </form>
+      <p>
+        Already have an account? <span id="loginLink">Login</span>
+      </p>
     </section>
   </main>
   <script src="/socket.io/socket.io.js"></script>
   <script type="module" src="main.js"></script>
-
 </body>
 
 </html>
