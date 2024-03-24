@@ -3,9 +3,9 @@ import crypto from "crypto";
 export default class User {
   private id: string;
   constructor(
-    private userName: string,
+    private email: string,
     private password: string,
-    private email: string
+    private userName?: string
   ) {
     this.id = crypto.randomUUID();
   }

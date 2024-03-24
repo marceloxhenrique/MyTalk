@@ -5,7 +5,7 @@ export class CreateUser {
   constructor(private userRepo: UserRepositoryInterface) {}
 
   async execute(input: CreteUserInput): Promise<CreteUserOutput> {
-    const user = new User(input.userName, input.email, input.password);
+    const user = new User(input.email, input.password);
     await this.userRepo.insert(user);
     console.log(user.getData());
     return user.getData();
@@ -13,14 +13,14 @@ export class CreateUser {
 }
 
 type CreteUserInput = {
-  userName: string;
+  userName?: string;
   email: string;
   password: string;
 };
 
 type CreteUserOutput = {
   id: string;
-  userName: string;
   email: string;
   password: string;
+  userName?: string;
 };
