@@ -3,8 +3,9 @@ import { createServer } from "node:http";
 import { fileURLToPath } from "node:url";
 import path, { dirname, join } from "node:path";
 import { Server } from "socket.io";
-import { CreateUser } from "./application/user.usecase.js";
+import { CreateUser } from "./application/createUser.usecase.js";
 import UserInMemory from "./infra/db/user.inmemory.js";
+import { FindUser } from "./application/findUser.usecase.js";
 
 const app: Express = express();
 const server = createServer(app);
@@ -24,14 +25,6 @@ app.get("/", (req: Request, res: Response) => {
   res.sendFile(join(__dirname, "..", "public", "index.html"));
 });
 
-const userInMemory = new UserInMemory();
-
-app.post("/register", async (req: Request, res: Response) => {
-  const user = new CreateUser(userInMemory);
-  const output = await user.execute(req.body);
-  res.json(output).status(200);
-});
-
 app.get("/chat.html", (req: Request, res: Response) => {
   const auth = false;
   console.log(auth);
@@ -42,27 +35,22 @@ app.get("/chat.html", (req: Request, res: Response) => {
     res.redirect("/");
   }
 });
+const userInMemory = new UserInMemory();
 
-// io.on("connection", (socket) => {
-//   console.log("A user connected");
-//   socket.on("room", (data) => {
-//     console.log(data);
-//     const user = new CreateUser(userInMemory);
-//     userInMemory.users;
-//     user.execute(data);
-//   });
+app.get("/users/:id", async (req: Request, res: Response) => {
+  const userId = req.params.id;
+  console.log(userId);
+  const findUser = new FindUser(userInMemory);
+  const output = await findUser.execute(userId);
+  console.log(output);
+  res.json(output);
+});
 
-//   socket.on("chat message", (msg) => {
-//     // io.emit("chat message", msg);
-//     console.log(msg);
-//     console.log(userInMemory.users.map((user) => user));
-//     io.emit("chat message", msg);
-//   });
-
-//   socket.on("disconnect", () => {
-//     console.log("User disconnected");
-//   });
-// });
+app.post("/register", async (req: Request, res: Response) => {
+  const user = new CreateUser(userInMemory);
+  const output = await user.execute(req.body);
+  res.json(output).status(200);
+});
 
 server.listen(port, () => {
   try {

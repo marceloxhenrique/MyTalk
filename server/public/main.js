@@ -37,28 +37,3 @@ const handleSignUp = async (e) => {
   }
 };
 document.querySelector("#signupForm").addEventListener("submit", handleSignUp);
-
-// form.addEventListener("submit", (e) => {
-//   e.preventDefault();
-
-//   const inputEmail = document.querySelector("#emailLogin");
-//   if (inputEmail.value) {
-//     console.log(inputEmail.value);
-//     const person = {
-//       userName: "Marcelo",
-//       email: inputEmail.value,
-//       password: "1234",
-//     };
-//     socket.emit("room", person);
-//     socket.emit("chat message", inputEmail.value);
-//     inputEmail.value = "";
-//   }
-// });
-
-// socket.on("chat message", (msg) => {
-//   const item = document.createElement("p");
-//   item.textContent = msg;
-//   const message = document.getElementById("messages");
-//   message.appendChild(item);
-//   window.scrollTo(0, document.body.scrollHeight);
-// });
