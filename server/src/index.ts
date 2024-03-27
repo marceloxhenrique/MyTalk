@@ -49,7 +49,7 @@ app.get("/users/:id", async (req: Request, res: Response) => {
 app.post("/register", async (req: Request, res: Response) => {
   const user = new CreateUser(userInMemory);
   const output = await user.execute(req.body);
-  res.json(output).status(200);
+  res.json(output);
 });
 
 server.listen(port, () => {

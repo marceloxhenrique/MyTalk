@@ -20,7 +20,7 @@ const handleSignUp = async (e) => {
   const email = document.querySelector("#signupEmail");
   const password = document.querySelector("#signupPassword");
   if (email.value.length > 1) {
-    await fetch("http://localhost:3000/register", {
+    const res = await fetch("http://localhost:3000/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -32,6 +32,7 @@ const handleSignUp = async (e) => {
     });
     email.value = "";
     password.value = "";
+    console.log("Answer from backend", res);
   } else {
     alert("Provide an Email");
   }

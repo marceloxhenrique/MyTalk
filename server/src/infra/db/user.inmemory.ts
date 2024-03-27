@@ -12,6 +12,11 @@ export default class UserInMemory implements UserRepositoryInterface {
     if (!user) return;
     return user;
   }
+
+  async findByEmail(email: string): Promise<User | undefined> {
+    const user = this.users.find((user) => user.getData().email === email);
+    return user;
+  }
   // userAlredyExist(value: User) {
   //   for (let user of this.users) {
   //     console.log(user);
