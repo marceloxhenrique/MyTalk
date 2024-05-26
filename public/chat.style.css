@@ -1,0 +1,201 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  /* box-shadow: 0 0 0 3px red inset; */
+}
+
+:root {
+  --main-background-color: #0D8CFF;
+  --main-background-color-fade: #0d8aff22;
+  --windows-background-color: rgb(255, 255, 255);
+  --windows-background-color-fade: rgba(255, 255, 255, 0.975);
+  --text-message-background: rgb(209, 209, 209);
+  --background-message-received: rgb(209, 209, 209);
+  --background-message-sent: #0D8CFF;
+  --background-input-message: rgb(209, 209, 209);
+  --primary-text-color: black;
+  --primary-text-color-fade: black;
+  --secondary-text-color: aliceblue;
+  --primary-font-text: Arial;
+  --time: rgba(231, 231, 231, 0.846);
+  --time-received: rgb(92, 92, 92);
+  --back-arrow: black;
+}
+
+main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.window {
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+#options {
+  width: 100%;
+  height: 4.5em;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  position: fixed;
+  z-index: 3;
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--windows-background-color-fade);
+}
+
+#back-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: .6em;
+  border: none;
+  cursor: pointer;
+  color: var(--back-arrow);
+  background-color: var(--windows-background-color);
+
+}
+
+#back-arrow:hover {
+  scale: 105%;
+}
+
+
+#contact-info {
+  width: 1.5em;
+  height: 1.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2em;
+  margin: 0 .6em;
+  border-radius: 50%;
+  text-decoration: none;
+  background-color: var(--main-background-color-fade);
+  color: var(--main-background-color);
+}
+
+#contact-name {
+  font-size: 1.5em;
+
+}
+
+#display-messages {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 8em;
+  padding-top: 80px;
+  background-color: var(--windows-background-color);
+}
+
+#message-received {
+  width: 70vw;
+  align-self: flex-start;
+  margin: .5em;
+  padding: .8em;
+  border-radius: 1.2em 1.2em 1.2em .2em;
+  padding-bottom: 1.5em;
+  overflow-wrap: break-word;
+  position: relative;
+  font-family: var(--primary-font-text);
+  background-color: var(--background-message-received);
+}
+
+#message-sent {
+  width: 70vw;
+  align-self: flex-end;
+  margin: .5em;
+  padding: .8em;
+  padding-bottom: 1em;
+  border-radius: 1.2em 1.2em .2em 1.2em;
+  line-height: 1.5em;
+  overflow-wrap: break-word;
+  position: relative;
+  font-family: var(--primary-font-text);
+  color: var(--secondary-text-color);
+  background-color: var(--background-message-sent);
+}
+
+#time {
+  margin-right: 1em;
+  position: absolute;
+  align-self: self-end;
+  font-size: smaller;
+  right: 0;
+  bottom: 0;
+  color: var(--time);
+}
+
+#time-received {
+  position: absolute;
+  align-self: self-end;
+  margin-right: .9em;
+  margin-bottom: .5em;
+  font-size: smaller;
+  right: 0;
+  bottom: 0;
+  color: var(--time-received);
+}
+
+.user-input-area {
+  width: 100%;
+  height: 10vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  gap: .6em;
+  padding: 2em .4em;
+  bottom: 0;
+  position: fixed;
+  background-color: var(--windows-background-color);
+}
+
+#user-input-text {
+  width: 80vw;
+  max-width: 90vw;
+  display: flex;
+  flex-direction: column;
+  margin: 10em 0;
+  padding: .7em;
+  border: none;
+  border-radius: .7em;
+  font-size: 1.2em;
+  text-decoration: none;
+  cursor: text;
+  outline: none;
+  background-color: var(--background-input-message);
+  font-family: var(--primary-font-text);
+  resize: none;
+  overflow-y: hidden;
+}
+
+#text::-webkit-scrollbar {
+  display: none;
+}
+
+.submit {
+  width: 4em;
+  height: 3.5em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: .7em;
+  border: none;
+  cursor: pointer;
+  background-color: var(--main-background-color);
+  transition: .5s;
+}
+
+.submit:hover {
+  scale: 105%;
+}
+
+.material-symbols-outlined {
+  color: var(--windows-background-color);
+}
