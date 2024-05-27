@@ -131,11 +131,10 @@ main {
   margin-right: .6em;
   width: 4em;
   border: 2px solid var(--main-background-color);
-  padding-top: .1em;
+  padding-top: .2em;
   padding-left: .2em;
   border-radius: 2em;
   cursor: pointer;
-  width: 4em;
   background-color: rgba(91, 91, 91, 0.295);
   box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.176);
 }
