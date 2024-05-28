@@ -6,14 +6,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MyChat App</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 </head>
 
 <body>
   <main>
-
-    <head>
-      <h1>MyChat</h1>
-    </head>
+    <div id="toggle">
+      <section id="darkmode-toggle">
+        <div id="dark-mode-icon">
+          <span class="material-symbols-outlined">dark_mode</span>
+        </div>
+        <div id="light-mode" class="light-mode-icon">
+          <span class="material-symbols-outlined">light_mode</span>
+        </div>
+      </section>
+    </div>
+    <h1>MyTalk</h1>
     <section id="login">
       <h2>Login</h2>
       <form>
@@ -31,7 +40,7 @@
         Need an account? <span id="signupLink">Sign up</span>
       </p>
     </section>
-    <section id="signup" class="dontShow">
+    <section id="signup" class="dont-show-signup">
       <h2>Sign Up</h2>
       <form id="signupForm">
         <label for="email">
@@ -49,11 +58,13 @@
       </p>
     </section>
 
-    <ul id="list"></ul>
+
   </main>
+  <footer>&copy; 2024 - Marcelo da Silva</footer>
   <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
   <!-- <script src="/socket.io/socket.io.js"></script> -->
   <script type="module" src="./main.js"></script>
+  <script type="module" src="./chat/chat.js"></script>
 </body>
 
 </html>
