@@ -5,7 +5,7 @@ export default class UserInMemory implements UserRepositoryInterface {
   users: User[] = [];
   async insert(user: User): Promise<void> {
     this.users.push(user);
-    console.log(this.users);
+    console.log("HEREEEE", this.users);
   }
   async findById(userId: string): Promise<User | undefined> {
     const user = this.users.find((user) => user.getData().id === userId);
