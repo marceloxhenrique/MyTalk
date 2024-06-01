@@ -1,15 +1,14 @@
-import User from "../../domain/user.entity.js";
-import { UserRepositoryInterface } from "../../domain/user.repository.js";
+import User from "../../domain/User.entity";
+import { UserRepositoryInterface } from "../../domain/User.repository";
 
 export default class UserInMemory implements UserRepositoryInterface {
   users: User[] = [];
-  async insert(user: User): Promise<void> {
+
+  async create(user: User): Promise<void> {
     this.users.push(user);
-    console.log("HEREEEE", this.users);
   }
   async findById(userId: string): Promise<User | undefined> {
     const user = this.users.find((user) => user.getData().id === userId);
-    if (!user) return;
     return user;
   }
 
@@ -17,9 +16,10 @@ export default class UserInMemory implements UserRepositoryInterface {
     const user = this.users.find((user) => user.getData().email === email);
     return user;
   }
-  // userAlredyExist(value: User) {
-  //   for (let user of this.users) {
-  //     console.log(user);
-  //   }
-  // }
 }
+
+type CreateUserOutput = {
+  id: string;
+  email: string;
+  userName?: string;
+};

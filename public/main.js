@@ -5,14 +5,14 @@ const signupSection = document.querySelector("#signup");
 
 const signupLink = document.getElementById("signupLink");
 signupLink.addEventListener("click", () => {
-  loginSection.classList.toggle("dontShow");
-  signupSection.classList.toggle("dontShow");
+  loginSection.classList.toggle("dont-show-signup");
+  signupSection.classList.toggle("dont-show-signup");
 });
 
 const loginLink = document.getElementById("loginLink");
 loginLink.addEventListener("click", () => {
-  loginSection.classList.toggle("dontShow");
-  signupSection.classList.toggle("dontShow");
+  loginSection.classList.toggle("dont-show-signup");
+  signupSection.classList.toggle("dont-show-signup");
 });
 
 const password = document.querySelector("#signupPassword");
@@ -21,9 +21,8 @@ const handleSignUp = async (e) => {
   e.preventDefault();
 
   if (!isValidEmail(email.value) || !isValidPassword(password.value)) {
-    alert("something is wrong");
+    alert("Must be a valid email and a password must have at least 6 characters");
   }
-  socket.emit("message", email.value);
   try {
     const result = await fetch("http://localhost:3000/register", {
       method: "POST",
@@ -35,6 +34,7 @@ const handleSignUp = async (e) => {
         password: password.value,
       }),
     });
+    console.log(result);
   } catch (error) {
     console.log("Something ent worng", error);
   }
