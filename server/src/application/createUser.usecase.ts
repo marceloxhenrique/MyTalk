@@ -16,8 +16,7 @@ export class CreateUser {
       await this.userRepo.create(user);
       return user.getData();
     }
-
-    return "Something went wrong";
+    return "Unable to sign up: Invalid email or password";
   }
 }
 

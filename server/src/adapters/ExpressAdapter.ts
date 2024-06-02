@@ -28,6 +28,10 @@ export default class ExpressAdapter implements HttpServer {
           res.json(data);
           return httpResponse;
         },
+        send: function (data: any): HttpResponse {
+          res.send(data);
+          return httpResponse;
+        },
       };
       callback(httpRequest, httpResponse);
     });
