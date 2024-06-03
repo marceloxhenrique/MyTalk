@@ -1,3 +1,4 @@
+import Toast from "./toast.js";
 const socket = io("ws://localhost:3000");
 const button = document.querySelector("button");
 const loginSection = document.querySelector("#login");
@@ -15,34 +16,88 @@ loginLink.addEventListener("click", () => {
   signupSection.classList.toggle("dont-show-signup");
 });
 
-const password = document.querySelector("#signupPassword");
-const email = document.querySelector("#signupEmail");
+const signUpInputEmail = document.querySelector("#signupEmail");
+const signUpInputPassword = document.querySelector("#signupPassword");
 const handleSignUp = async (e) => {
   e.preventDefault();
 
-  if (!isValidEmail(email.value) || !isValidPassword(password.value)) {
-    alert("Must be a valid email and a password must have at least 6 characters");
+  if (!isValidEmail(signUpInputEmail.value) || !isValidPassword(signUpInputPassword.value)) {
+    const toast = new Toast(
+      "Error",
+      "Use a valid email and a password with at least 6 characters."
+    );
+    return toast.addToastError();
   }
   try {
-    const result = await fetch("http://localhost:3000/register", {
+    const signResult = await fetch("http://localhost:3000/api/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        email: email.value,
-        password: password.value,
+        email: signUpInputEmail.value,
+        password: signUpInputPassword.value,
       }),
     });
-    console.log(result);
+    if (signResult.ok) {
+      signUpInputEmail.value = "";
+      signUpInputPassword.value = "";
+      loginSection.classList.toggle("dont-show-signup");
+      signupSection.classList.toggle("dont-show-signup");
+      const toast = new Toast("Success", "You have signed up successfully!");
+      toast.addToastSuccess();
+    } else {
+      const output = await signResult.json();
+      const toast = new Toast("Error", output.message);
+      toast.addToastError();
+    }
   } catch (error) {
-    console.log("Something ent worng", error);
+    console.error("Error", error);
+    const toast = new Toast("Error", "Sign-up failed.");
+    toast.addToastError();
   }
 };
+document.querySelector("#signup").addEventListener("submit", handleSignUp);
+
+const loginInputEmail = document.querySelector("#emailLogin");
+const loginInputPassword = document.querySelector("#passwordLogin");
+const handleLogin = async (e) => {
+  e.preventDefault();
+
+  if (!isValidEmail(loginInputEmail.value) || !isValidPassword(loginInputPassword.value)) {
+    const toast = new Toast(
+      "Error",
+      "Use a valid email and a password with at least 6 characters."
+    );
+    return toast.addToastError();
+  }
+  try {
+    const loginResult = await fetch("http://localhost:3000/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: loginInputEmail.value,
+        password: loginInputPassword.value,
+      }),
+    });
+    if (loginResult.ok) {
+      return (window.location.href = "./chat/chat.html");
+    }
+    const output = await loginResult.json();
+    const toast = new Toast("Error", output.message);
+    toast.addToastError();
+  } catch (error) {
+    const toast = new Toast("Error", "Login failed.");
+    toast.addToastError();
+    console.error("Error", error);
+  }
+};
+document.querySelector("#login").addEventListener("submit", handleLogin);
 
 const isValidEmail = (email) => {
-  const validEmail =
-    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  const validEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   return validEmail.test(String(email).toLowerCase());
 };
 
@@ -51,12 +106,9 @@ const isValidPassword = (password) => {
   return validPassword.test(String(password));
 };
 
-const regiteruse = document.querySelector("#signup");
-regiteruse.addEventListener("submit", handleSignUp);
-
-const list = document.getElementById("list");
-socket.on("message", (msg) => {
-  const newItem = document.createElement("li");
-  newItem.textContent = msg;
-  list?.appendChild(newItem);
-});
+// const list = document.getElementById("list");
+// socket.on("message", (msg) => {
+//   const newItem = document.createElement("li");
+//   newItem.textContent = msg;
+//   list?.appendChild(newItem);
+// });
