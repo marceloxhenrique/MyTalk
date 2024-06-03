@@ -1,12 +1,12 @@
-import { CreateUser } from "../../application/CreateUser.usecase";
-import { UserRepositoryInterface } from "../../domain/User.repository";
-import { FindUser } from "../../application/FindUser.usecase";
-import ExpressAdapter from "../../adapters/ExpressAdapter";
-import UserLogin from "../../application/UserLogin.usecase";
+import { CreateUser } from "./CreateUser.usecase";
+import { UserRepositoryInterface } from "../domain/User.repository";
+import { FindUser } from "./FindUser.usecase";
+import UserLogin from "./UserLogin.usecase";
+import { HttpServer } from "../adapters/HttpServer";
 
 export default class UserController {
-  constructor(readonly userInMemory: UserRepositoryInterface, readonly httpserver: ExpressAdapter) {
-    httpserver.on("get", "/users/:id", async (req, res) => {
+  constructor(readonly userInMemory: UserRepositoryInterface, readonly httpServer: HttpServer) {
+    httpServer.on("get", "/api/users/:id", async (req, res) => {
       try {
         const userEmail = req.params.id;
         const findUser = new FindUser(userInMemory);
@@ -17,27 +17,26 @@ export default class UserController {
       }
     });
 
-    httpserver.on("post", "/register", async (req, res) => {
+    httpServer.on("post", "/api/register", async (req, res) => {
       try {
         const user = new CreateUser(userInMemory);
         const output = await user.execute(req.body);
-        console.log(output);
-        res.json(output);
+        res.status(201).json(output);
       } catch (error) {
         res.status(401).json({ message: "Email or password invalid" });
       }
     });
 
-    httpserver.on("post", "/login", async (req, res) => {
+    httpServer.on("post", "/api/login", async (req, res) => {
       try {
         const logUser = new UserLogin(userInMemory);
         const output = await logUser.execute(req.body.email, req.body.password);
         console.log("login", output);
         res.status(200).json(output);
-      } catch (error: any) {
+      } catch (error) {
         res.status(401).json({ message: "Email or password invalid" });
       }
     });
-    httpserver.listen(3000);
+    httpServer.listen(3000, () => {});
   }
 }

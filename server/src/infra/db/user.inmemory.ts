@@ -17,9 +17,3 @@ export default class UserInMemory implements UserRepositoryInterface {
     return user;
   }
 }
-
-type CreateUserOutput = {
-  id: string;
-  email: string;
-  userName?: string;
-};

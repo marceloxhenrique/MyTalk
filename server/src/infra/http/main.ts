@@ -1,11 +1,11 @@
 import ExpressAdapter from "../../adapters/ExpressAdapter";
 import UserInMemory from "../db/user.inmemory";
 import { WebsocketConnection } from "./socket";
-import UserController from "./UserController";
+import UserController from "../../application/UserController";
 
-const expressAdapter = new ExpressAdapter();
+const httpServer = new ExpressAdapter();
 const userInMemory = new UserInMemory();
-new UserController(userInMemory, expressAdapter);
+new UserController(userInMemory, httpServer);
 
-const websocketConnection = new WebsocketConnection(expressAdapter.serverSocket());
+const websocketConnection = new WebsocketConnection(httpServer.serverSocket());
 websocketConnection.execute();

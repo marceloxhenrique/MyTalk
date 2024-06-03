@@ -5,8 +5,8 @@ export interface UserRepositoryInterface {
   findById(userId: string): Promise<User | undefined>;
   findByEmail(email: string): Promise<User | undefined>;
 }
-type CreateUserOutput = {
-  id: string;
-  email: string;
-  userName?: string;
-};
+// type CreateUserOutput = {
+//   id: string;
+//   email: string;
+//   userName?: string;
+// };

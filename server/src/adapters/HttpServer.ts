@@ -7,6 +7,7 @@ export interface HttpRequest {
 export interface HttpResponse {
   status(statusCode: number): this;
   json(data: any): this;
+  send(data: any): this;
 }
 
 export type RequestHandler = (req: HttpRequest, res: HttpResponse) => void;

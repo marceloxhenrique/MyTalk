@@ -28,6 +28,10 @@ export default class ExpressAdapter implements HttpServer {
           res.json(data);
           return httpResponse;
         },
+        send: function (data: any): HttpResponse {
+          res.send(data);
+          return httpResponse;
+        },
       };
       callback(httpRequest, httpResponse);
     });
@@ -39,7 +43,7 @@ export default class ExpressAdapter implements HttpServer {
 
   listen(port: number) {
     this.server.listen(port, () => {
-      console.log(`Server running in port: http://localhost:${port}`);
+      console.log(`Server running in port: http://localhost:${port}/api`);
     });
   }
 }
