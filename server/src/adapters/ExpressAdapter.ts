@@ -1,16 +1,23 @@
 import express, { Express, Request, Response } from "express";
 import { HttpRequest, HttpResponse, HttpServer, RequestHandler } from "./HttpServer";
 import { createServer, Server as HttpServerType } from "node:http";
-import cors from "cors";
+import cookieParser from "cookie-parser";
+import { CookieOptions } from "express";
+import path, { dirname } from "node:path";
+import { fileURLToPath } from "url";
+import { get } from "node:https";
 
 export default class ExpressAdapter implements HttpServer {
   private app: Express;
   server: HttpServerType;
+  private __dirname: string;
   constructor() {
     this.app = express();
     this.server = createServer(this.app);
     this.app.use(express.json());
-    this.app.use(cors());
+    this.app.use(cookieParser());
+    this.__dirname = dirname(fileURLToPath(import.meta.url));
+    this.app.use(express.static(path.join(this.__dirname, "../../../", "public")));
   }
   on(method: "post" | "get" | "put" | "delete", url: string, callback: RequestHandler): void {
     this.app[method](url, (req: Request, res: Response) => {
@@ -28,8 +35,16 @@ export default class ExpressAdapter implements HttpServer {
           res.json(data);
           return httpResponse;
         },
-        send: function (data: any): HttpResponse {
+        send: function (data): HttpResponse {
           res.send(data);
+          return httpResponse;
+        },
+        cookie: function (name: string, val: string, options: CookieOptions): HttpResponse {
+          res.cookie(name, val, options);
+          return httpResponse;
+        },
+        sendFile: function (data: any): HttpResponse {
+          res.sendFile(data);
           return httpResponse;
         },
       };
@@ -40,10 +55,13 @@ export default class ExpressAdapter implements HttpServer {
   serverSocket(): HttpServerType {
     return this.server;
   }
+  dirname(): string {
+    return this.__dirname;
+  }
 
   listen(port: number) {
     this.server.listen(port, () => {
-      console.log(`Server running in port: http://localhost:${port}/api`);
+      console.log(`Server running in port: http://localhost:${port}`);
     });
   }
 }
