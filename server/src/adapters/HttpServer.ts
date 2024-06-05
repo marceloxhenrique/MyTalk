@@ -18,5 +18,4 @@ export type RequestHandler = (req: HttpRequest, res: HttpResponse) => void;
 export interface HttpServer {
   on(method: "post" | "get" | "put" | "delete", url: string, callback: RequestHandler): void;
   listen(port: number, callback: () => void): void;
-  dirname(): string;
 }

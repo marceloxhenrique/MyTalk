@@ -4,7 +4,6 @@ import { FindUser } from "./FindUser.usecase";
 import UserLogin from "./UserLogin.usecase";
 import { HttpServer } from "../adapters/HttpServer";
 import TokenService from "../domain/services/TokenService";
-import { join } from "path";
 
 export default class UserController {
   constructor(
@@ -12,18 +11,11 @@ export default class UserController {
     readonly httpServer: HttpServer,
     private tokenService: TokenService
   ) {
-    httpServer.on("get", "/", async (_req, res) => {
-      try {
-        res.sendFile(join(httpServer.dirname(), "../../../", "public", "index.html"));
-      } catch (error) {
-        res.status(404).json({ message: "User not found" });
-      }
-    });
     httpServer.on("post", "/api/register", async (req, res) => {
       try {
-        const user = new CreateUser(userInMemory);
-        const output = await user.execute(req.body);
-        res.status(201).json(output);
+        const createUser = new CreateUser(userInMemory);
+        const newUser = await createUser.execute(req.body);
+        res.status(201).json(newUser);
       } catch (error) {
         res.status(401).json({ message: "Email or password invalid" });
       }

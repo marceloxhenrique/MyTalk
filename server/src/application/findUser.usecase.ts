@@ -5,7 +5,7 @@ export class FindUser {
 
   async execute(input: string): Promise<CreateUserOutput | undefined> {
     const user = await this.userRepo.findById(input);
-    if (!user) throw new Error("Email not found");
+    if (!user) throw new Error("User not found");
     return user.getData();
   }
 }

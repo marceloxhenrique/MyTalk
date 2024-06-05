@@ -4,9 +4,10 @@ export default class User {
   private id: string;
 
   constructor(private email: string, private password: string, private userName?: string) {
-    if (!this.validEmail(email)) {
+    if (!this.isValidEmail(email)) {
       throw new Error("Invalid email format");
     }
+    this.isValidPassword(password);
     this.id = crypto.randomUUID();
   }
 
@@ -17,9 +18,15 @@ export default class User {
     this.userName = value;
   }
 
-  private validEmail(email: string) {
+  private isValidEmail(email: string) {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailRegex.test(email);
+  }
+  private isValidPassword(password: string) {
+    if (password.length < 5) {
+      throw new Error("Invalid password length");
+    }
+    return;
   }
 
   getPassword() {

@@ -3,21 +3,15 @@ import { HttpRequest, HttpResponse, HttpServer, RequestHandler } from "./HttpSer
 import { createServer, Server as HttpServerType } from "node:http";
 import cookieParser from "cookie-parser";
 import { CookieOptions } from "express";
-import path, { dirname } from "node:path";
-import { fileURLToPath } from "url";
-import { get } from "node:https";
 
 export default class ExpressAdapter implements HttpServer {
   private app: Express;
   server: HttpServerType;
-  private __dirname: string;
   constructor() {
     this.app = express();
     this.server = createServer(this.app);
     this.app.use(express.json());
     this.app.use(cookieParser());
-    this.__dirname = dirname(fileURLToPath(import.meta.url));
-    this.app.use(express.static(path.join(this.__dirname, "../../../", "public")));
   }
   on(method: "post" | "get" | "put" | "delete", url: string, callback: RequestHandler): void {
     this.app[method](url, (req: Request, res: Response) => {
@@ -54,9 +48,6 @@ export default class ExpressAdapter implements HttpServer {
 
   serverSocket(): HttpServerType {
     return this.server;
-  }
-  dirname(): string {
-    return this.__dirname;
   }
 
   listen(port: number) {
