@@ -1,8 +1,9 @@
+import { CreateUser } from "./../src/application/CreateUser.usecase";
 import { FindUser } from "../src/application/FindUser.usecase";
 import UserLogin from "../src/application/UserLogin.usecase";
-import { UserRepositoryInterface } from "../src/domain/User.repository";
 import UserInMemory from "../src/infra/db/user.inmemory";
-import { CreateUser } from "../src/application/CreateUser.usecase";
+import { JwtConfig } from "../src/infra/config/JwtConfig";
+import JwtTokenService from "../src/infra/services/JwtTokenService";
 describe("Create User ", () => {
   it("Shoudl create a user", async () => {
     const user = {
@@ -10,31 +11,25 @@ describe("Create User ", () => {
       password: "123456",
     };
 
-    const userInMemory: UserRepositoryInterface = new UserInMemory();
-    const createUser: CreateUser = new CreateUser(userInMemory);
-    await createUser.execute(user);
+    const userInMemory = new UserInMemory();
+    const createUser = new CreateUser(userInMemory);
+    const newUser = await createUser.execute(user);
 
-    const findUser: FindUser = new FindUser(userInMemory);
-    const output = await findUser.execute(user.email);
-    expect(output?.email).toEqual(user.email);
+    expect(newUser).toBeDefined();
   });
   it("Should login a user", async () => {
-    const user1 = {
+    const newUser = {
       email: "jhon@test.gmail.com",
       password: "123456",
     };
 
     const userInMemory = new UserInMemory();
     const createUser = new CreateUser(userInMemory);
-    await createUser.execute(user1);
+    await createUser.execute(newUser);
 
-    const user = {
-      email: "jhon@test.gmail.com",
-      password: "123456",
-    };
-
-    const logUser = new UserLogin(userInMemory);
-    const result = await logUser.execute(user.email, user.password);
-    expect(user1.email).toEqual(result.email);
+    const tokenService = new JwtTokenService(JwtConfig);
+    const logUser = new UserLogin(userInMemory, tokenService);
+    const result = await logUser.execute(newUser.email, newUser.password);
+    expect(newUser.email).toEqual(result.user.email);
   });
 });

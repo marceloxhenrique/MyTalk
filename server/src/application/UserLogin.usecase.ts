@@ -1,8 +1,9 @@
+import TokenService from "../domain/services/TokenService";
 import { UserRepositoryInterface } from "../domain/User.repository";
 import bcrypt from "bcrypt";
 
 export default class UserLogin {
-  constructor(private userInMemory: UserRepositoryInterface) {}
+  constructor(private userInMemory: UserRepositoryInterface, private tokenService: TokenService) {}
   async execute(email: string, password: string) {
     const user = await this.userInMemory.findByEmail(email);
     if (!user) {
@@ -12,6 +13,11 @@ export default class UserLogin {
     if (!isPasswordValid) {
       throw new Error("Unable to log in: Invalid email or password");
     }
-    return user.getData();
+    const output = {
+      token: this.tokenService.generateToken({ sub: user.getData().id }),
+      refreshToken: this.tokenService.generateRefreshToken({ sub: user.getData().id }),
+      user: user.getData(),
+    };
+    return output;
   }
 }
