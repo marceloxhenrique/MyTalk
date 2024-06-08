@@ -1,8 +1,13 @@
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import z from "zod";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../contexts/AuthContext";
 
-import * as z from "zod";
+const BACKEND_URL_BASE = import.meta.env.VITE_BACKEND_URL_BASE;
 
 const schemaLogin = z.object({
   email: z
@@ -12,74 +17,90 @@ const schemaLogin = z.object({
   password: z.string().min(6, { message: "Password must have at least 6 characters" }),
 });
 
-export default function Login() {
-  const [toogleForm, setToggleForm] = useState(true);
-
+export default function Login(props: {
+  toggleForm: boolean;
+  setToggleForm: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
+  const navigate = useNavigate();
   type LoginFormProps = z.infer<typeof schemaLogin>;
-  function handleLoingForm(userInfo: LoginFormProps) {
-    console.log(userInfo);
-  }
 
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<LoginFormProps>({
     resolver: zodResolver(schemaLogin),
   });
+  const authContext = useContext(AuthContext);
+
+  async function handleLoginForm(userInfo: LoginFormProps) {
+    try {
+      const result = await axios.post(`${BACKEND_URL_BASE}/login`, userInfo, {
+        withCredentials: true,
+      });
+      if (authContext) {
+        authContext.login(result.data);
+      }
+      reset();
+      navigate("/contacts");
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error("Email or password invalid!");
+        console.error(error);
+      }
+    }
+  }
 
   return (
-    <main className="w-full h-screen flex flex-col justify-center  items-center bg-secondaryColor">
-      <section className="md:h-screen w-full flex justify-center items-center">
-        <img src="/MyTalkLogo.png" alt="MytalkLogo" className="hidden md:block" />
+    <form
+      onSubmit={handleSubmit((userInfo) => handleLoginForm(userInfo))}
+      className="flex flex-col w-full px-4 md:px-8 py-10 max-w-lg lg:border lg:border-primaryColor lg:rounded-md lg:bg-primaryColorlt"
+    >
+      <h2 className="text-primaryColor text-2xl mb-12 font-extrabold">Log in</h2>
+      <label htmlFor="email" className="flex flex-col text-primaryTextColor">
+        Email
+      </label>
+      <input
+        {...register("email")}
+        type="text"
+        className="input"
+        placeholder="Enter your email adress"
+      />
+      <span className="h-7 text-red-500 mb-1 text-sm">
+        {errors.email?.message && <p>{errors.email.message}</p>}
+      </span>
+      <label htmlFor="password" className="flex flex-col text-primaryTextColor ">
+        Password
+      </label>
+      <input
+        {...register("password")}
+        type="password"
+        name="password"
+        className="input"
+        placeholder="Enter your password"
+      />
+
+      <section className="h-7 text-red-500 mb-1 text-sm ">
+        {errors.password?.message && <p>{errors.password.message}</p>}
       </section>
-      <section className="w-full flex flex-col justify-center items-center bg-secondaryColor">
-        <h1 className="text-5xl md:text-7xl text-primaryColor font-extrabold md:hidden">MyTalk</h1>
-        <form
-          onSubmit={handleSubmit((userInfo) => handleLoingForm(userInfo))}
-          className=" flex flex-col w-full px-4 py-6 max-w-lg md:border md:border-blue-500 rounded-md"
+      <button
+        type="submit"
+        className="bg-primaryColor rounded-md py-3 my-2 text-secondaryTextColor text-lg font-semibold"
+      >
+        Log in
+      </button>
+      <p className="text-primaryTextColor mt-5 text-center">
+        Need an account?{" "}
+        <a
+          onClick={() => {
+            props.setToggleForm(!props.toggleForm);
+          }}
+          className="underline text-primaryColor font-bold cursor-pointer"
         >
-          <h2 className="text-primaryColor text-2xl mb-12 font-extrabold">Log in</h2>
-          <label htmlFor="email" className="flex flex-col text-primaryTextColor font-semibold">
-            Email
-          </label>
-          <input
-            {...register("email")}
-            type="text"
-            className="input"
-            placeholder="Enter your email adress"
-          />
-          {errors.email?.message && <p>{errors.email.message}</p>}
-          <label htmlFor="password" className="flex flex-col text-primaryTextColor ">
-            Password
-          </label>
-          <input
-            {...register("password")}
-            type="password"
-            name="password"
-            className="input"
-            placeholder="Enter your password"
-          />
-          {errors.password?.message && <p>{errors.password.message}</p>}
-          <button
-            type="submit"
-            className="bg-primaryColor rounded-md py-3 my-2 text-secondaryTextColor text-lg font-semibold"
-          >
-            Log in
-          </button>
-          <p className="text-primaryTextColor mt-5 text-center">
-            Need an account?{" "}
-            <a
-              onClick={() => {
-                setToggleForm(!toogleForm);
-              }}
-              className="underline text-primaryColor font-bold cursor-pointer"
-            >
-              Sign up
-            </a>
-          </p>
-        </form>
-      </section>
-    </main>
+          Sign up
+        </a>
+      </p>
+    </form>
   );
 }

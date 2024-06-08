@@ -3,7 +3,8 @@ import { HttpRequest, HttpResponse, HttpServer, RequestHandler } from "./HttpSer
 import { createServer, Server as HttpServerType } from "node:http";
 import cookieParser from "cookie-parser";
 import { CookieOptions } from "express";
-
+import cors from "cors";
+const FRONT_END_URL = process.env.FRONT_END_URL;
 export default class ExpressAdapter implements HttpServer {
   private app: Express;
   server: HttpServerType;
@@ -12,6 +13,13 @@ export default class ExpressAdapter implements HttpServer {
     this.server = createServer(this.app);
     this.app.use(express.json());
     this.app.use(cookieParser());
+    this.app.use(
+      cors({
+        origin: FRONT_END_URL ?? "http://localhost:5173",
+        optionsSuccessStatus: 200,
+        credentials: true,
+      })
+    );
   }
   on(method: "post" | "get" | "put" | "delete", url: string, callback: RequestHandler): void {
     this.app[method](url, (req: Request, res: Response) => {

@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "jest",
-    "dev": "tsx watch --env-file=.env server/src/infra/http/main.ts"
+    "dev": "tsx watch --env-file=.env src/infra/http/main.ts"
   },
   "keywords": [],
   "author": "",
