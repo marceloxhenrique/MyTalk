@@ -1,8 +1,9 @@
 import crypto from "crypto";
+import Contact from "../contact/Contact.entity";
 
 export default class User {
   private id: string;
-
+  private contacts: Contact[] | null = [];
   constructor(private email: string, private password: string, private userName?: string) {
     if (!this.isValidEmail(email)) {
       throw new Error("Invalid email format");
@@ -34,11 +35,11 @@ export default class User {
   }
 
   getData() {
-    const userDate = {
+    const userData = {
       id: this.id,
       userName: this.userName,
       email: this.email,
     };
-    return userDate;
+    return userData;
   }
 }

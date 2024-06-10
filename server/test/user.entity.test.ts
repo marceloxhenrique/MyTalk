@@ -1,4 +1,4 @@
-import User from "../src/domain/User.entity";
+import User from "../src/domain/user/User.entity";
 
 describe("User Test", () => {
   it("Should create an user", () => {

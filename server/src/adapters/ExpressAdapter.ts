@@ -27,6 +27,7 @@ export default class ExpressAdapter implements HttpServer {
         body: req.body,
         params: req.params,
         query: req.query,
+        cookies: req.cookies,
       };
       const httpResponse: HttpResponse = {
         status: (statusCode: number) => {

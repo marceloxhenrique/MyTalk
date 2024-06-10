@@ -1,5 +1,5 @@
-import User from "../domain/User.entity";
-import { UserRepositoryInterface } from "../domain/User.repository";
+import User from "../../domain/user/User.entity";
+import { UserRepositoryInterface } from "../../domain/user/User.repository";
 import bcrypt from "bcrypt";
 export class CreateUser {
   constructor(private userRepo: UserRepositoryInterface) {}

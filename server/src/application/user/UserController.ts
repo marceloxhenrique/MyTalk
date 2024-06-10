@@ -1,9 +1,9 @@
 import { CreateUser } from "./CreateUser.usecase";
-import { UserRepositoryInterface } from "../domain/User.repository";
+import { UserRepositoryInterface } from "../../domain/user/User.repository";
 import { FindUser } from "./FindUser.usecase";
 import UserLogin from "./UserLogin.usecase";
-import { HttpServer } from "../adapters/HttpServer";
-import TokenService from "../domain/services/TokenService";
+import { HttpServer } from "../../adapters/HttpServer";
+import TokenService from "../../domain/services/TokenService";
 
 export default class UserController {
   constructor(
@@ -50,6 +50,7 @@ export default class UserController {
 
     httpServer.on("get", "/api/users/:id", async (req, res) => {
       try {
+        const verifyToken = tokenService.verifyToken(req.cookies.MyTalk_Token);
         const userId = req.params.id;
         const findUser = new FindUser(userInMemory);
         const output = await findUser.execute(userId);
