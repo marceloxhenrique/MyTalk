@@ -4,6 +4,7 @@ import JwtConfig from "../config/JwtConfig";
 
 export default class JwtTokenService implements TokenService {
   constructor(private readonly jwtConfig: JwtConfig) {}
+
   generateToken(payload: object): string {
     return jwt.sign(payload, this.jwtConfig.tokenSecret, {
       expiresIn: this.jwtConfig.tokenExpiresIn,

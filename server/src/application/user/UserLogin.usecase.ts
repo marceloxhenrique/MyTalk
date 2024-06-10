@@ -1,5 +1,5 @@
-import TokenService from "../domain/services/TokenService";
-import { UserRepositoryInterface } from "../domain/User.repository";
+import TokenService from "../../domain/services/TokenService";
+import { UserRepositoryInterface } from "../../domain/user/User.repository";
 import bcrypt from "bcrypt";
 
 export default class UserLogin {

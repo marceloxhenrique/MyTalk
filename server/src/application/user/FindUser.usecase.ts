@@ -1,4 +1,4 @@
-import { UserRepositoryInterface } from "../domain/User.repository";
+import { UserRepositoryInterface } from "../../domain/user/User.repository";
 
 export class FindUser {
   constructor(private userRepo: UserRepositoryInterface) {}
