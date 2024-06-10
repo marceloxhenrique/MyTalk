@@ -50,12 +50,15 @@ export default class UserController {
 
     httpServer.on("get", "/api/users/:id", async (req, res) => {
       try {
-        const verifyToken = tokenService.verifyToken(req.cookies.MyTalk_Token);
+        tokenService.verifyToken(req.cookies.MyTalk_Token);
         const userId = req.params.id;
         const findUser = new FindUser(userInMemory);
         const output = await findUser.execute(userId);
         res.json(output);
-      } catch (error) {
+      } catch (error: any) {
+        if (error.message === "Token verification failed") {
+          return res.status(401).json({ message: "Unauthorized" });
+        }
         res.status(404).json({ message: "User not found" });
       }
     });

@@ -1,4 +1,3 @@
-import TokenService from "../../domain/services/TokenService";
 import { UserRepositoryInterface } from "../../domain/user/User.repository";
 
 export class FindUser {
