@@ -12,6 +12,8 @@ export default {
 
         primaryTextColor: "var(--clr-primary-text)",
         secondaryTextColor: "var(--clr-secondary-text)",
+
+        backgroundMessageReceived: "var(--background-message-received)",
       },
     },
   },
