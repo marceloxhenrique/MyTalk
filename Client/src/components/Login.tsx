@@ -14,7 +14,9 @@ const schemaLogin = z.object({
     .string()
     .min(1, { message: "This field is obligatory" })
     .email("This is not a valid email."),
-  password: z.string().min(6, { message: "Password must have at least 6 characters" }),
+  password: z
+    .string()
+    .min(6, { message: "Password must have at least 6 characters" }),
 });
 
 export default function Login(props: {
@@ -40,10 +42,11 @@ export default function Login(props: {
         withCredentials: true,
       });
       if (authContext) {
+        console.log(result.data);
         authContext.login(result.data);
       }
       reset();
-      navigate("/contacts");
+      navigate("/messages");
     } catch (error) {
       if (error instanceof Error) {
         toast.error("Email or password invalid!");
@@ -55,9 +58,11 @@ export default function Login(props: {
   return (
     <form
       onSubmit={handleSubmit((userInfo) => handleLoginForm(userInfo))}
-      className="flex flex-col w-full px-4 md:px-8 py-10 max-w-lg lg:border lg:border-primaryColor lg:rounded-md lg:bg-primaryColorlt"
+      className="flex w-full max-w-lg flex-col px-4 py-10 md:px-8 lg:rounded-md lg:border lg:border-primaryColor lg:bg-primaryColorlt"
     >
-      <h2 className="text-primaryColor text-2xl mb-12 font-extrabold">Log in</h2>
+      <h2 className="mb-12 text-2xl font-extrabold text-primaryColor">
+        Log in
+      </h2>
       <label htmlFor="email" className="flex flex-col text-primaryTextColor">
         Email
       </label>
@@ -67,10 +72,10 @@ export default function Login(props: {
         className="input"
         placeholder="Enter your email adress"
       />
-      <span className="h-7 text-red-500 mb-1 text-sm">
+      <span className="mb-1 h-7 text-sm text-red-500">
         {errors.email?.message && <p>{errors.email.message}</p>}
       </span>
-      <label htmlFor="password" className="flex flex-col text-primaryTextColor ">
+      <label htmlFor="password" className="flex flex-col text-primaryTextColor">
         Password
       </label>
       <input
@@ -81,22 +86,22 @@ export default function Login(props: {
         placeholder="Enter your password"
       />
 
-      <section className="h-7 text-red-500 mb-1 text-sm ">
+      <section className="mb-1 h-7 text-sm text-red-500">
         {errors.password?.message && <p>{errors.password.message}</p>}
       </section>
       <button
         type="submit"
-        className="bg-primaryColor rounded-md py-3 my-2 text-secondaryTextColor text-lg font-semibold"
+        className="my-2 rounded-md bg-primaryColor py-3 text-lg font-semibold text-secondaryTextColor"
       >
         Log in
       </button>
-      <p className="text-primaryTextColor mt-5 text-center">
+      <p className="mt-5 text-center text-primaryTextColor">
         Need an account?{" "}
         <a
           onClick={() => {
             props.setToggleForm(!props.toggleForm);
           }}
-          className="underline text-primaryColor font-bold cursor-pointer"
+          className="cursor-pointer font-bold text-primaryColor underline"
         >
           Sign up
         </a>
