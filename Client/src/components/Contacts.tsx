@@ -31,6 +31,7 @@ export default function Contacts({
 
   socket.on("listOfUsers", (list) => {
     setUserList(list);
+    console.log("List of Users", list);
   });
 
   const handleCreateRoom = (receiverId: string) => {
@@ -49,7 +50,7 @@ export default function Contacts({
   };
 
   return (
-    <section className="h-screen w-full bg-gray-200 p-1 transition-all">
+    <section className="h-screen w-full bg-primaryColor p-1 transition-all">
       <section className="flex flex-row p-2">
         <span className="flex h-12 w-14 items-center justify-center rounded-full bg-primaryColorlt text-xl font-bold text-primaryColor">
           {firstLetter}

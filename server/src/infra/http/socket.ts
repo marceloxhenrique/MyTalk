@@ -1,7 +1,6 @@
 import { Server as SocketIOServer } from "socket.io";
 import { Server as HttpServerType } from "http";
 
-// const FRONT_END_URL = process.env.FRONT_END_URL;
 export class WebsocketConnection {
   listOfUser: { userEmail: string; userId: string; socketId: string }[] = [];
   constructor(private server: HttpServerType) {}

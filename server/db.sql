@@ -1,0 +1,10 @@
+
+DROP TABLE IF EXISTS public.user CASCADE;
+
+CREATE TABLE public.user (
+  id VARCHAR(100) NOT NULL PRIMARY KEY,
+  password VARCHAR(100) NOT NULL,
+  email VARCHAR(100) NOT NULL UNIQUE,
+  user_name VARCHAR(100)
+
+);

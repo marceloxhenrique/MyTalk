@@ -7,22 +7,22 @@ import TokenService from "../../domain/services/TokenService";
 
 export default class UserController {
   constructor(
-    readonly userInMemory: UserRepositoryInterface,
+    readonly userDatabaseRepository: UserRepositoryInterface,
     readonly httpServer: HttpServer,
     private tokenService: TokenService
   ) {
     httpServer.on("post", "/api/register", async (req, res) => {
       try {
-        const createUser = new CreateUser(userInMemory);
+        const createUser = new CreateUser(userDatabaseRepository);
         const newUser = await createUser.execute(req.body);
         res.status(201).json(newUser);
       } catch (error) {
-        res.status(401).json({ message: "Email or password invalid" });
+        res.status(401).json({ message: "Email or password invalid!" });
       }
     });
     httpServer.on("post", "/api/login", async (req, res) => {
       try {
-        const logUser = new UserLogin(userInMemory, tokenService);
+        const logUser = new UserLogin(userDatabaseRepository, tokenService);
         const output = await logUser.execute(req.body.email, req.body.password);
         if (output.user && output.token && output.refreshToken) {
           res
@@ -52,7 +52,7 @@ export default class UserController {
       try {
         tokenService.verifyToken(req.cookies.MyTalk_Token);
         const userId = req.params.id;
-        const findUser = new FindUser(userInMemory);
+        const findUser = new FindUser(userDatabaseRepository);
         const output = await findUser.execute(userId);
         res.json(output);
       } catch (error: any) {

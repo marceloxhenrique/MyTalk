@@ -20,13 +20,21 @@ export default function Messages() {
   const [receiverId, setReceiverId] = useState<string>();
 
   useEffect(() => {
-    socket.connect();
-    socket.emit("registerUser", {
-      userEmail: user?.currentUser?.email,
-      userId: user?.currentUser?.id,
-      socketId: socket.id,
-    });
-    console.log(socket.id);
+    if (user?.currentUser) {
+      socket.connect();
+      socket.emit("registerUser", {
+        userEmail: user?.currentUser?.email,
+        userId: user?.currentUser?.id,
+        socketId: socket.id,
+      });
+    }
+    if (!user) {
+      socket.disconnect();
+    }
+    return () => {
+      socket.off("private-message");
+      socket.disconnect();
+    };
   }, [user]);
 
   socket.on(
