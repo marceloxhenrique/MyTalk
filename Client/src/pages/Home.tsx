@@ -6,19 +6,33 @@ export default function Home() {
   const [toggleForm, setToggleForm] = useState(true);
   return (
     <main
-      className={`flex h-screen w-full flex-col bg-secondaryColor transition-all duration-100 lg:flex-row lg:px-36`}
+      className={`flex h-screen w-full flex-col overflow-y-auto overflow-x-hidden bg-secondaryColor transition-all lg:flex-row`}
     >
-      <section className="animate__animated animate__slideInLeft flex w-full items-center justify-center lg:h-screen">
+      <section className="animate__animated animate__slideInLeft animate__fast flex w-full flex-col items-center justify-center pt-4 lg:h-screen">
+        <section className="flex flex-col items-center sm:flex-row lg:items-center">
+          <h1 className="font-bold text-primaryTextColor [font-size:_clamp(2em,3.5vw,10em)]">
+            Welcome to
+          </h1>
+          <img
+            src="/MyTalkLogo.png"
+            alt="MytalkLogo"
+            className="h-14 transition-all duration-300 ease-linear hover:drop-shadow-[0px_0px_30px_#2363e3b8] lg:block lg:h-[5vw]"
+          />
+        </section>
         <img
-          src="/MyTalkLogo.png"
+          src="/background-hero.png"
           alt="MytalkLogo"
-          className="hidden transition-all duration-300 ease-linear hover:drop-shadow-[0px_0px_30px_#2363e3b8] lg:block"
+          className="h-20 transition-all ease-linear hover:drop-shadow-[0px_0px_30px_#2363e3b8] md:h-40 lg:block lg:h-auto"
         />
+        <h2 className="px-2 font-semibold text-primaryTextColor [font-size:_clamp(1.5em,2.5vw,8em)]">
+          Your{" "}
+          <span className="text-primaryColor hover:drop-shadow-[0px_0px_30px_#2363e3b8]">
+            Chat
+          </span>{" "}
+          simplified
+        </h2>
       </section>
-      <section className="flex h-screen w-full flex-col items-center justify-center bg-secondaryColor">
-        <h1 className="mb-6 text-5xl font-extrabold text-primaryColor transition-all duration-1000 md:text-7xl lg:hidden">
-          MyTalk
-        </h1>
+      <section className="animate__animated animate__slideInRight animate__fast flex h-screen w-full flex-col items-center bg-secondaryColor lg:justify-center">
         {toggleForm ? (
           <Login toggleForm={toggleForm} setToggleForm={setToggleForm} />
         ) : (

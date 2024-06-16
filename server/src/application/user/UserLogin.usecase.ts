@@ -5,19 +5,30 @@ import bcrypt from "bcrypt";
 export default class UserLogin {
   constructor(private userInMemory: UserRepositoryInterface, private tokenService: TokenService) {}
   async execute(email: string, password: string) {
-    const user = await this.userInMemory.findByEmail(email);
-    if (!user) {
+    const result = await this.userInMemory.findByEmail(email);
+    const user = {
+      id: result[0].id,
+      userName: result[0].userName,
+      email: result[0].email,
+    };
+    if (this.isValidUser(result)) {
       throw new Error("Unable to log in : Invalid email or password");
     }
-    const isPasswordValid = await bcrypt.compare(password, user.getPassword());
+
+    const isPasswordValid = await bcrypt.compare(password, result[0].password);
     if (!isPasswordValid) {
       throw new Error("Unable to log in: Invalid email or password");
     }
+
     const output = {
-      token: this.tokenService.generateToken({ sub: user.getData().id }),
-      refreshToken: this.tokenService.generateRefreshToken({ sub: user.getData().id }),
-      user: user.getData(),
+      token: this.tokenService.generateToken({ sub: user.id }),
+      refreshToken: this.tokenService.generateRefreshToken({ sub: user.id }),
+      user: user,
     };
     return output;
+  }
+
+  isValidUser(user: any) {
+    return user.length === 0;
   }
 }

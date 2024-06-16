@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "jest",
-    "dev": "tsx watch --env-file=.env src/infra/http/main.ts"
+    "dev": "tsx watch --env-file=.env src/infra/http/main.ts",
+    "migrate": "tsx --env-file=.env ./Migrate.ts"
   },
   "keywords": [],
   "author": "",
@@ -18,6 +19,7 @@
     "@types/jest": "^29.5.12",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^20.11.28",
+    "@types/pg": "^8.11.6",
     "cpy-cli": "^5.0.0",
     "jest": "^29.7.0",
     "nodemon": "^3.1.0",
@@ -31,6 +33,8 @@
     "cors": "^2.8.5",
     "express": "^4.18.3",
     "jsonwebtoken": "^9.0.2",
+    "pg": "^8.12.0",
+    "pg-promise": "^11.8.0",
     "socket.io": "^4.7.5"
   }
 }

@@ -8,16 +8,20 @@ import ContactInMeory from "../db/Contact.inmemory";
 import ContactController from "../../application/contact/ContactContoller";
 import MessageInMemory from "../db/Message.inmemory";
 import MessageController from "../../application/message/MessageController";
+import UserDatabaseRepository from "../db/UserDatabase.Reposisotory";
+import Connection from "../../domain/services/Connection";
+import PgPromiseAdapter from "../../adapters/PgPromiseAdapter";
 
 const httpServer = new ExpressAdapter();
 const userInMemory = new UserInMemory();
+const connection = new PgPromiseAdapter();
+const userDatabaseRepository = new UserDatabaseRepository(connection);
 const contactInMemory = new ContactInMeory();
 const sendMessageInMemory = new MessageInMemory();
-new MessageController(httpServer, sendMessageInMemory);
-
 const jwtTokenService = new JwtTokenService(JwtConfig);
-new ContactController(contactInMemory, httpServer);
-new UserController(userInMemory, httpServer, jwtTokenService);
-
 const websocketConnection = new WebsocketConnection(httpServer.serverSocket());
 websocketConnection.execute();
+
+new MessageController(httpServer, sendMessageInMemory);
+new ContactController(contactInMemory, httpServer);
+new UserController(userDatabaseRepository, httpServer, jwtTokenService);
