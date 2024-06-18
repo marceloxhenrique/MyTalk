@@ -46,15 +46,11 @@ describe("Create User ", () => {
     const tokenService = new JwtTokenService(JwtConfig);
     const logUser = new UserLogin(userInMemory, tokenService);
     const result = await logUser.execute(newUser.email, newUser.password);
-    const findUser = new FindUser(userInMemory);
-    const userById = await findUser.execute(result.user.id);
 
-    expect(userById?.id).toEqual(result.user.id);
+    const findUser = new FindUser(userInMemory);
+
+    const userById = await findUser.execute(result.user.id!);
+
+    expect(userById?.getData().id).toEqual(result.user.id);
   });
 });
-
-type CreateUserOutput = {
-  id: string;
-  email: string;
-  userName?: string;
-};

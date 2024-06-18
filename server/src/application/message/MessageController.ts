@@ -7,7 +7,6 @@ export default class MessageController {
     httpServer.on("post", "/api/message", async (req, res) => {
       try {
         const message = req.body;
-        console.log(message);
         const sendMessage = new SendMessage(messageRepo);
         const result = await sendMessage.execute(message);
         res.status(201).json({ message: "Message sent" });

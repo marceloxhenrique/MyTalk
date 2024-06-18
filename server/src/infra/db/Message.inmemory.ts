@@ -5,7 +5,6 @@ export default class MessageInMemory implements MessageInterface {
   message: Message[] = [];
   async send(message: Message): Promise<boolean> {
     const result = this.message.push(message);
-    console.log("Messages", this.message);
     return true;
   }
 }

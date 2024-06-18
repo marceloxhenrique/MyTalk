@@ -4,9 +4,10 @@ import bcrypt from "bcrypt";
 export class CreateUser {
   constructor(private userRepo: UserRepositoryInterface) {}
 
-  async execute(input: CreteUserInput): Promise<CreateUserOutput | string> {
+  async execute(input: CreteUserInput): Promise<CreateUserOutput | undefined> {
     const userExist = await this.userRepo.findByEmail(input.email);
-    if (this.isValidUser(userExist) && input.password.length > 5) {
+
+    if (userExist === null && input.password.length > 5) {
       const saltRounds: number = 10;
       const salt = bcrypt.genSaltSync(saltRounds);
       const hashPassword = bcrypt.hashSync(input.password, salt);
@@ -17,9 +18,6 @@ export class CreateUser {
 
     throw new Error("Email or password invalid");
   }
-  isValidUser(user: any) {
-    return user.length === 0;
-  }
 }
 
 type CreteUserInput = {
@@ -29,7 +27,7 @@ type CreteUserInput = {
 };
 
 type CreateUserOutput = {
-  id: string;
+  id: string | undefined;
   email: string;
   userName?: string;
 };

@@ -2,14 +2,18 @@ import crypto from "crypto";
 import Contact from "../contact/Contact.entity";
 
 export default class User {
-  private id: string;
   private contacts: Contact[] | null = [];
-  constructor(private email: string, private password: string, private userName?: string) {
+  constructor(
+    private email: string,
+    private password: string,
+    private userName?: string,
+    private id?: string
+  ) {
     if (!this.isValidEmail(email)) {
       throw new Error("Invalid email format");
     }
     this.isValidPassword(password);
-    this.id = crypto.randomUUID();
+    this.id = id ?? crypto.randomUUID();
   }
 
   updateUserName(value: string) {
