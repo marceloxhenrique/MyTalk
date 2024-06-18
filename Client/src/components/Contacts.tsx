@@ -50,9 +50,9 @@ export default function Contacts({
   };
 
   return (
-    <section className="h-screen w-full bg-primaryColor p-1 transition-all">
+    <section className="bg-primaryColor h-screen w-full p-1 transition-all">
       <section className="flex flex-row p-2">
-        <span className="flex h-12 w-14 items-center justify-center rounded-full bg-primaryColorlt text-xl font-bold text-primaryColor">
+        <span className="bg-primaryColorlt text-primaryColor flex h-12 w-14 items-center justify-center rounded-full text-xl font-bold">
           {firstLetter}
         </span>
         <p className="flex w-full items-center justify-center text-xl">
@@ -64,9 +64,9 @@ export default function Contacts({
           userList.map((user) => (
             <li
               key={user.socketId}
-              className="flex cursor-pointer flex-row items-center rounded-md border-b border-primaryColorlt p-2 py-4 hover:bg-blue-200 hover:bg-primaryColorlt"
+              className="border-primaryColorlt hover:bg-primaryColorlt flex cursor-pointer flex-row items-center rounded-md border-b p-2 py-4 hover:bg-blue-200"
             >
-              <span className="mr-4 flex h-12 w-12 items-center justify-center rounded-full bg-primaryColorlt text-xl font-bold text-primaryColor">
+              <span className="bg-primaryColorlt text-primaryColor mr-4 flex h-12 w-12 items-center justify-center rounded-full text-xl font-bold">
                 {user.userEmail && user.userEmail.slice(0, 2)}
               </span>
               <button
