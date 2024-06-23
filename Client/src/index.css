@@ -5,7 +5,7 @@
 @layer base {
   :root {
     --clr-primary: #2363e3;
-    --clr-primary-lt: #2363e31b;
+    --clr-primary-lt: #dfe9ff;
 
     --clr-secondary: #efefef;
     --clr-secondary-lt: #f3f3f7ce;

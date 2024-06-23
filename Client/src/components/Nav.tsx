@@ -1,52 +1,67 @@
-import { MessageSquarePlus, Search } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { AddContact } from "./AddContact";
+import { MessageSquareMore, MessageSquarePlus, UserPlus } from "lucide-react";
 
-export const Nav = () => {
+export const Nav = ({
+  setItem,
+}: {
+  setItem: React.Dispatch<
+    React.SetStateAction<"newContact" | "newMessage" | "addContact">
+  >;
+}) => {
   return (
     <section>
-      <nav className="m-3.5 flex justify-center gap-4">
+      <nav className="m-3.5 flex justify-center gap-8 text-primaryColor">
         <TooltipProvider>
-          <div className="flex h-9 w-9 items-center justify-center rounded-md p-1 hover:bg-primaryColorlt">
+          <li
+            onClick={() => setItem("newContact")}
+            className="flex h-9 w-9 items-center justify-center rounded-md p-1 hover:bg-primaryColorlt"
+          >
             <Tooltip delayDuration={0}>
               <TooltipTrigger>
-                <AddContact />
+                <MessageSquareMore />
               </TooltipTrigger>
               <TooltipContent className="bg-primaryColor text-secondaryTextColor">
-                <p>Add Contact</p>
+                <p>Chats</p>
               </TooltipContent>
             </Tooltip>
-          </div>
+          </li>
         </TooltipProvider>
         <TooltipProvider>
-          <div className="flex h-9 w-9 items-center justify-center rounded-md p-1 hover:bg-primaryColorlt">
+          <li
+            onClick={() => setItem("newMessage")}
+            className="flex h-9 w-9 items-center justify-center rounded-md p-1 hover:bg-primaryColorlt"
+          >
             <Tooltip delayDuration={0}>
               <TooltipTrigger>
-                {<MessageSquarePlus className="text-primaryColor" />}
+                <MessageSquarePlus />
               </TooltipTrigger>
               <TooltipContent className="bg-primaryColor text-secondaryTextColor">
                 <p>New Message</p>
               </TooltipContent>
             </Tooltip>
-          </div>
+          </li>
+        </TooltipProvider>
+        <TooltipProvider>
+          <li
+            onClick={() => setItem("addContact")}
+            className="flex h-9 w-9 items-center justify-center rounded-md p-1 hover:bg-primaryColorlt"
+          >
+            <Tooltip delayDuration={0}>
+              <TooltipTrigger>
+                <UserPlus />
+              </TooltipTrigger>
+              <TooltipContent className="bg-primaryColor text-secondaryTextColor">
+                <p>Add Contact</p>
+              </TooltipContent>
+            </Tooltip>
+          </li>
         </TooltipProvider>
       </nav>
-      <h1 className="text-center text-xl">Conversations</h1>
-      <div className="relative m-3.5 rounded-md border border-gray-300 md:my-4 md:rounded-md">
-        <Search className="absolute left-2 top-3 h-4 w-4 text-muted-foreground" />
-        <input
-          type="text"
-          name=""
-          id=""
-          className="w-full rounded-md p-2 pl-8"
-          placeholder="Search"
-        />
-      </div>
     </section>
   );
 };

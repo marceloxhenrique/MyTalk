@@ -2,11 +2,11 @@ import { Toaster } from "react-hot-toast";
 import "./App.css";
 import Home from "./pages/Home";
 import { Routes, Route, Navigate } from "react-router-dom";
-import Messages from "./pages/Messages";
 import RequireAuth from "./RequireAuth";
 import { useContext } from "react";
 import { AuthContext } from "./contexts/AuthContext";
 import NotFound from "./pages/NotFound";
+import { Chat } from "./pages/Chat";
 
 const AnonymousRoute = ({ children }: { children: JSX.Element }) => {
   const user = useContext(AuthContext);
@@ -30,10 +30,10 @@ function App() {
           }
         />
         <Route
-          path="/messages"
+          path="/chat"
           element={
             <RequireAuth>
-              <Messages />
+              <Chat />
             </RequireAuth>
           }
         />
