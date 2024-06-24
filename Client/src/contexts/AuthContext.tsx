@@ -1,14 +1,17 @@
-import { createContext, useState } from "react";
+import axios from "axios";
+import { createContext, useEffect, useState } from "react";
 
 type User = {
   email: string | undefined;
   id: string | undefined;
+  userName?: string | undefined;
 };
 
 type AuthContextType = {
   currentUser: User | undefined;
   login: (user: User) => void;
 };
+const BACKEND_URL_BASE = import.meta.env.VITE_BACKEND_URL_BASE;
 export const AuthContext = createContext<AuthContextType | null>(null);
 
 export default function AuthContextProvider({
@@ -16,7 +19,21 @@ export default function AuthContextProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [currentUser, setCurrentUser] = useState<User>();
+  const [currentUser, setCurrentUser] = useState<User | undefined>(undefined);
+
+  useEffect(() => {
+    async function checkUserAuth() {
+      const { data } = await axios.get(`${BACKEND_URL_BASE}/authenticateuser`, {
+        withCredentials: true,
+      });
+      setCurrentUser({
+        id: data.id,
+        email: data.email,
+        userName: data.userName,
+      });
+    }
+    checkUserAuth();
+  }, []);
 
   const login = (user: User): void => {
     setCurrentUser({ id: user.id, email: user.email });

@@ -4,6 +4,7 @@ import { FindUser } from "./FindUser.usecase";
 import UserLogin from "./UserLogin.usecase";
 import { HttpServer } from "../../adapters/HttpServer";
 import TokenService from "../../domain/services/TokenService";
+import AuthenticateUser from "./AuthenticateUser";
 
 export default class UserController {
   constructor(
@@ -60,6 +61,23 @@ export default class UserController {
           return res.status(401).json({ message: "Unauthorized" });
         }
         res.status(404).json({ message: "User not found" });
+      }
+    });
+
+    httpServer.on("get", "/api/authenticateuser", async (req, res) => {
+      const token = req.cookies.MyTalk_Token;
+      if (!token) {
+        return;
+      }
+      try {
+        const authenticateUser = new AuthenticateUser(tokenService, userDatabaseRepository);
+
+        const userAuthenticated = await authenticateUser.execute(token);
+        res.status(201).json(userAuthenticated);
+      } catch (error) {
+        console.error("An error occurred", error);
+
+        return;
       }
     });
 

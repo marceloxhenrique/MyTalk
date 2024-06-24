@@ -44,6 +44,18 @@ export const Chat = () => {
     };
   }, [user]);
 
+  const [userList, setUserList] = useState<
+    {
+      userEmail: string;
+      userId: string;
+      socketId: string;
+    }[]
+  >();
+
+  socket.on("listOfUsers", (list) => {
+    setUserList(list);
+  });
+
   socket.on(
     "private_message",
     (msg: { senderId: string; receiverId: string; content: string }) => {
@@ -58,7 +70,7 @@ export const Chat = () => {
         <div className="flex h-[calc(100%-7px)] w-full flex-col md:max-w-sm">
           <Nav setItem={setItem} />
           {item === "newContact" && (
-            <Contact settings={{ setReceiverId, setMessages, item }} />
+            <Contact settings={{ setReceiverId, setMessages, userList }} />
           )}
           {item === "newMessage" && <Message />}
           {item === "addContact" && <AddContact />}

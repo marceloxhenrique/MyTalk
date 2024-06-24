@@ -14,7 +14,7 @@ const AnonymousRoute = ({ children }: { children: JSX.Element }) => {
   if (!user?.currentUser?.email) {
     return children;
   }
-  return <Navigate to={"/contacts"} />;
+  return <Navigate to={"/chat"} />;
 };
 
 function App() {

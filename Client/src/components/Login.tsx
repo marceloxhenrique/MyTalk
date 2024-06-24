@@ -42,7 +42,6 @@ export default function Login(props: {
         withCredentials: true,
       });
       if (authContext) {
-        console.log(result.data);
         authContext.login(result.data);
       }
       reset();

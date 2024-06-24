@@ -2,7 +2,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Search } from "lucide-react";
 import ConversationDrawer from "./ChatWindowDrawer";
 import { socket } from "@/Socket";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "@/contexts/AuthContext";
 
 type MessageProps = {
@@ -10,6 +10,14 @@ type MessageProps = {
   receiverId: string | undefined;
   content: string | undefined;
 };
+
+type UserList =
+  | {
+      userEmail: string;
+      userId: string;
+      socketId: string;
+    }[]
+  | undefined;
 
 export function Contact({
   settings,
@@ -19,24 +27,11 @@ export function Contact({
     setMessages: React.Dispatch<
       React.SetStateAction<MessageProps[] | undefined>
     >;
-    item: "newContact" | "newMessage" | "addContact";
+    userList: UserList;
   };
 }) {
   const userInfo = useContext(AuthContext);
   const [previousReceiver, setPreviousReceiver] = useState<string>();
-  const [userList, setUserList] = useState<
-    {
-      userEmail: string;
-      userId: string;
-      socketId: string;
-    }[]
-  >();
-  useEffect(() => {
-    socket.on("listOfUsers", (list) => {
-      setUserList(list);
-      console.log("List of Users", list);
-    });
-  }, [settings.item]);
 
   const handleCreateRoom = (receiverId: string) => {
     settings.setMessages([]);
@@ -68,8 +63,8 @@ export function Contact({
         </div>
         <ScrollArea className="flex w-full px-3 py-4 md:p-4">
           <ul className="md:hidden">
-            {userList &&
-              userList.map((user) => (
+            {settings.userList &&
+              settings.userList.map((user) => (
                 <ConversationDrawer key={user.userId}>
                   <li
                     className="group my-2 flex cursor-pointer flex-row items-center gap-2 rounded-md border border-gray-300 bg-background p-4 text-sm shadow-md hover:bg-primaryColorlt"
@@ -87,8 +82,8 @@ export function Contact({
               ))}
           </ul>
           <ul className="hidden md:block">
-            {userList &&
-              userList.map((user) => (
+            {settings.userList &&
+              settings.userList.map((user) => (
                 <li
                   key={user.userId}
                   className="group my-2 flex cursor-pointer flex-row items-center gap-2 rounded-md border border-gray-300 bg-background p-4 text-sm shadow-md hover:bg-primaryColorlt"

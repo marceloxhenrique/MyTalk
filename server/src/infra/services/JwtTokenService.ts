@@ -10,11 +10,12 @@ export default class JwtTokenService implements TokenService {
       expiresIn: this.jwtConfig.tokenExpiresIn,
     });
   }
-  verifyToken(token: string): object | null {
+  verifyToken(token: string): string | jwt.JwtPayload {
     try {
-      return jwt.verify(token, this.jwtConfig.tokenSecret) as { sub: string };
+      const res = jwt.verify(token, this.jwtConfig.tokenSecret);
+      return res.sub as string;
     } catch (error) {
-      throw new Error("Token verification failed");
+      return "Unauthorized";
     }
   }
   generateRefreshToken(payload: object): string {

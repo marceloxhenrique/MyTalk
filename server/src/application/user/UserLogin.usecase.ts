@@ -3,10 +3,12 @@ import { UserRepositoryInterface } from "../../domain/user/User.repository";
 import bcrypt from "bcrypt";
 
 export default class UserLogin {
-  constructor(private userInMemory: UserRepositoryInterface, private tokenService: TokenService) {}
+  constructor(
+    private userRepository: UserRepositoryInterface,
+    private tokenService: TokenService
+  ) {}
   async execute(email: string, password: string) {
-    const result = await this.userInMemory.findByEmail(email);
-
+    const result = await this.userRepository.findByEmail(email);
     if (result === null) {
       throw new Error("Unable to log in : Invalid email or password");
     }
