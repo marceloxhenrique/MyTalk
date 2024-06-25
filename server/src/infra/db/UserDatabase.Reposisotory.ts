@@ -12,15 +12,24 @@ export default class UserDatabaseRepository implements UserRepositoryInterface {
     );
   }
 
-  findById(userId: string): Promise<User | undefined> {
-    throw new Error("Method not implemented.");
+  async findById(userId: string): Promise<User | null> {
+    const res = await this.connection.query(`SELECT * FROM public.user WHERE id = $1`, [userId]);
+    if (res.length === 0) {
+      return null;
+    }
+    const row = res[0];
+
+    return new User(row.email, row.password, row.user_name, row.id);
   }
 
-  async findByEmail(email: string) {
-    const result = await this.connection.query(`SELECT * FROM public.user WHERE email = $1`, [
-      email,
-    ]);
+  async findByEmail(email: string): Promise<User | null> {
+    const res = await this.connection.query(`SELECT * FROM public.user WHERE email = $1`, [email]);
 
-    return result;
+    if (res.length === 0) {
+      return null;
+    }
+    const row = res[0];
+
+    return new User(row.email, row.password, row.user_name, row.id);
   }
 }

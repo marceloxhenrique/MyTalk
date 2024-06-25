@@ -42,11 +42,10 @@ export default function Login(props: {
         withCredentials: true,
       });
       if (authContext) {
-        console.log(result.data);
         authContext.login(result.data);
       }
       reset();
-      navigate("/messages");
+      navigate("/chat");
     } catch (error) {
       if (error instanceof Error) {
         toast.error("Email or password invalid!");

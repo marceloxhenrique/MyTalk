@@ -2,64 +2,128 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --clr-primary: #2363e3;
-  --clr-primary-lt: #2363e31b;
+@layer base {
+  :root {
+    --clr-primary: #2363e3;
+    --clr-primary-lt: #dfe9ff;
 
-  --clr-secondary: #efefef;
-  --clr-secondary-lt: #f3f3f7ce;
+    --clr-secondary: #efefef;
+    --clr-secondary-lt: #f3f3f7ce;
 
-  --clr-primary-text: black;
-  --clr-secondary-text: white;
+    --clr-primary-text: black;
+    --clr-secondary-text: white;
 
-  --background-message-received: rgb(209, 209, 209);
+    --background-message-received: rgb(209, 209, 209);
 
-  --text-message-background: rgb(209, 209, 209);
-  --background-message-sent: #2363e3;
-  --background-input-message: rgb(209, 209, 209);
-  --primary-text-color: black;
-  --primary-text-color-fade: black;
-  --secondary-text-color: aliceblue;
-  --primary-font-text: Arial;
-  --time: rgba(231, 231, 231, 0.846);
-  --time-received: rgb(92, 92, 92);
-  --back-arrow: black;
-  --send-button: aliceblue;
-  --user-input-area: rgb(22, 22, 22);
+    --text-message-background: rgb(209, 209, 209);
+    --background-message-sent: #2363e3;
+    --background-input-message: rgb(209, 209, 209);
+    --primary-text-color: black;
+    --primary-text-color-fade: black;
+    --secondary-text-color: aliceblue;
+    --primary-font-text: Arial;
+    --time: rgba(231, 231, 231, 0.846);
+    --time-received: rgb(92, 92, 92);
+    --back-arrow: black;
+    --send-button: aliceblue;
+    --user-input-area: rgb(22, 22, 22);
 
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --clr-primary: #2d4ce6;
+    --clr-primary-lt: #0d8aff22;
+
+
+    --clr-secondary: rgb(24, 24, 24);
+    --clr-secondary-lt: rgba(24, 24, 24, 0.964);
+
+    --clr-primary-text: rgb(255, 255, 255);
+    --clr-secondary-text: white;
+
+    --text-message-background: rgb(209, 209, 209);
+    --background-message-received: rgb(74, 74, 74);
+    --background-message-sent: #2d4ce6;
+    --background-input-message: rgb(74, 74, 74);
+    --primary-text-color: aliceblue;
+    --primary-text-color-fade: rgb(255, 255, 255);
+    --secondary-text-color: aliceblue;
+    --primary-font-text: Arial;
+    --time: rgba(231, 231, 231, 0.846);
+    --time-received: rgb(156, 156, 156);
+    --back-arrow: rgb(255, 255, 255);
+    --send-button: rgb(173, 173, 173);
+    --user-input-area: rgba(223, 223, 223, 0.597);
+
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+  }
 }
 
-.dark {
-
-  --clr-primary: #2d4ce6;
-  --clr-primary-lt: #0d8aff22;
-
-
-  --clr-secondary: rgb(24, 24, 24);
-  --clr-secondary-lt: rgba(24, 24, 24, 0.964);
-
-  --clr-primary-text: rgb(255, 255, 255);
-  --clr-secondary-text: white;
-
-  --text-message-background: rgb(209, 209, 209);
-  --background-message-received: rgb(74, 74, 74);
-  --background-message-sent: #2d4ce6;
-  --background-input-message: rgb(74, 74, 74);
-  --primary-text-color: aliceblue;
-  --primary-text-color-fade: rgb(255, 255, 255);
-  --secondary-text-color: aliceblue;
-  --primary-font-text: Arial;
-  --time: rgba(231, 231, 231, 0.846);
-  --time-received: rgb(156, 156, 156);
-  --back-arrow: rgb(255, 255, 255);
-  --send-button: rgb(173, 173, 173);
-  --user-input-area: rgba(223, 223, 223, 0.597);
-}
-
-@layer components {
+@layer base {
   .input {
     @apply w-full border rounded-md p-2 mt-1 outline-none border-gray-400 transition-all
   }
 
+  * {
+    @apply border-border;
+  }
 
+  body {
+    @apply bg-background text-foreground;
+  }
 }
