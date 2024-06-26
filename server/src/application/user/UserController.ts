@@ -5,6 +5,7 @@ import UserLogin from "./UserLogin.usecase";
 import { HttpServer } from "../../adapters/HttpServer";
 import TokenService from "../../domain/services/TokenService";
 import AuthenticateUser from "./AuthenticateUser";
+import UserLogout from "./UserLogout";
 
 export default class UserController {
   constructor(
@@ -18,6 +19,7 @@ export default class UserController {
         const newUser = await createUser.execute(req.body);
         res.status(201).json(newUser);
       } catch (error) {
+        console.error(error);
         res.status(401).json({ message: "Email or password invalid!" });
       }
     });
@@ -45,6 +47,7 @@ export default class UserController {
           throw new Error("Error Missing Email ");
         }
       } catch (error) {
+        console.error(error);
         res.status(401).json({ message: "Email or password invalid" });
       }
     });
@@ -78,6 +81,36 @@ export default class UserController {
         console.error("An error occurred", error);
 
         return;
+      }
+    });
+
+    httpServer.on("get", "/api/logout", async (req, res) => {
+      try {
+        const token = req.cookies.MyTalk_Token;
+        if (!token || token === undefined) {
+          return res.status(401).json("Unauthorized");
+        }
+
+        const userLogout = new UserLogout(tokenService);
+        userLogout.execute(token);
+        res
+          .clearCookie("MyTalk_Token", {
+            httpOnly: true,
+            secure: true,
+            credentials: true,
+            sameSite: "strict",
+          })
+          .clearCookie("Mytalk_Refresh_Token", {
+            httpOnly: true,
+            secure: true,
+            credentials: true,
+            sameSite: "strict",
+          })
+          .status(200)
+          .json({ message: "Logged out" });
+      } catch (error) {
+        console.error(error);
+        res.status(401).json({ message: "Token Unauthorized" });
       }
     });
 

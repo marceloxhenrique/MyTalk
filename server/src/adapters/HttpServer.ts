@@ -1,3 +1,4 @@
+import { ObjectEncodingOptions } from "fs";
 import { dirname } from "path";
 export interface HttpRequest {
   body?: any;
@@ -12,6 +13,7 @@ export interface HttpResponse {
   send(data: any): this;
   cookie(name: string, val: string, options: Object): this;
   sendFile(data: any): this;
+  clearCookie(token: string, options: Object): this;
 }
 
 export type RequestHandler = (req: HttpRequest, res: HttpResponse) => void;

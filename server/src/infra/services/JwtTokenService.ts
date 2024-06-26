@@ -15,6 +15,7 @@ export default class JwtTokenService implements TokenService {
       const res = jwt.verify(token, this.jwtConfig.tokenSecret);
       return res.sub as string;
     } catch (error) {
+      console.log(error);
       return "Unauthorized";
     }
   }

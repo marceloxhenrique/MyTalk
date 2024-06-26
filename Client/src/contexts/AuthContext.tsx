@@ -10,6 +10,7 @@ type User = {
 type AuthContextType = {
   currentUser: User | undefined;
   login: (user: User) => void;
+  logOut: () => void;
 };
 const BACKEND_URL_BASE = import.meta.env.VITE_BACKEND_URL_BASE;
 export const AuthContext = createContext<AuthContextType | null>(null);
@@ -34,12 +35,15 @@ export default function AuthContextProvider({
     }
     checkUserAuth();
   }, []);
+  const logOut = () => {
+    setCurrentUser(undefined);
+  };
 
   const login = (user: User): void => {
     setCurrentUser({ id: user.id, email: user.email });
   };
   return (
-    <AuthContext.Provider value={{ currentUser, login }}>
+    <AuthContext.Provider value={{ currentUser, login, logOut }}>
       {children}
     </AuthContext.Provider>
   );
