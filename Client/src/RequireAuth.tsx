@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function RequireAuth({ children }: { children: JSX.Element }) {
   const currentUser = useContext(AuthContext);
+
   const navigate = useNavigate();
   const [isLoading, setLoading] = useState(true);
   useEffect(() => {

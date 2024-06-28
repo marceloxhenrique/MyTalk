@@ -1,6 +1,11 @@
 export default class Contact {
-  private id: string;
-  constructor(private email: string, private userId: string, private userName?: string) {
+  constructor(
+    private contactId: string,
+    private email: string,
+    private contactName: string,
+    private userId: string,
+    private id?: string
+  ) {
     if (!this.isValidEmail(email)) {
       throw new Error("Invalid Email format");
     }
@@ -8,7 +13,7 @@ export default class Contact {
       throw new Error("User Id Invalid");
     }
 
-    this.id = crypto.randomUUID();
+    this.id = id ?? crypto.randomUUID();
   }
   private isValidEmail(email: string) {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -22,9 +27,10 @@ export default class Contact {
   getData() {
     const contactData = {
       id: this.id,
+      contactId: this.contactId,
       email: this.email,
+      contactName: this.contactName,
       userId: this.userId,
-      userName: this.userName,
     };
     return contactData;
   }

@@ -32,6 +32,7 @@ export default function AuthContextProvider({
         email: data.email,
         userName: data.userName,
       });
+      console.log(data);
     }
     checkUserAuth();
   }, []);

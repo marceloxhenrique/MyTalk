@@ -8,9 +8,6 @@ export default class AuthenticateUser {
   ) {}
   async execute(token: string) {
     const res = this.tokenService.verifyToken(token);
-    if (res === "Unauthorized") {
-      return;
-    }
     const user = await this.userRepository.findById(res as string);
     return user?.getData();
   }

@@ -1,5 +1,6 @@
 
 DROP TABLE IF EXISTS public.user CASCADE;
+DROP TABLE IF EXISTS public.contact CASCADE;
 
 CREATE TABLE public.user (
   id VARCHAR(100) NOT NULL PRIMARY KEY,
@@ -7,4 +8,13 @@ CREATE TABLE public.user (
   email VARCHAR(100) NOT NULL UNIQUE,
   user_name VARCHAR(100)
 
+);
+
+CREATE TABLE public.contact (
+  id VARCHAR(100) NOT NULL PRIMARY KEY,
+  contact_id VARCHAR(100) NOT NULL,
+  email VARCHAR(100) NOT NULL,
+  contact_name VARCHAR(100) NOT NULL,
+  user_id VARCHAR(100) NOT NULL ,
+  CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES public.user(id)
 );

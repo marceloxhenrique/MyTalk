@@ -79,8 +79,7 @@ export default class UserController {
         res.status(201).json(userAuthenticated);
       } catch (error) {
         console.error("An error occurred", error);
-
-        return;
+        res.status(401).json({ message: "Unauthorized" });
       }
     });
 
