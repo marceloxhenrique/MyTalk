@@ -24,18 +24,26 @@ export default function AuthContextProvider({
 
   useEffect(() => {
     async function checkUserAuth() {
-      const { data } = await axios.get(`${BACKEND_URL_BASE}/authenticateuser`, {
-        withCredentials: true,
-      });
-      setCurrentUser({
-        id: data.id,
-        email: data.email,
-        userName: data.userName,
-      });
-      console.log(data);
+      try {
+        const { data } = await axios.get(
+          `${BACKEND_URL_BASE}/authenticateuser`,
+          {
+            withCredentials: true,
+          },
+        );
+        setCurrentUser({
+          id: data.id,
+          email: data.email,
+          userName: data.userName,
+        });
+        console.log(data);
+      } catch (error) {
+        console.error(error);
+      }
     }
     checkUserAuth();
   }, []);
+
   const logOut = () => {
     setCurrentUser(undefined);
   };

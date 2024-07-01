@@ -72,7 +72,9 @@ export const Chat = () => {
           {item === "newContact" && (
             <Contact settings={{ setReceiverId, setMessages, userList }} />
           )}
-          {item === "newMessage" && <Message />}
+          {item === "newMessage" && (
+            <Message settings={{ setReceiverId, setMessages }} />
+          )}
           {item === "addContact" && <AddContact />}
         </div>
         <ChatWindow messages={messages} receiverId={receiverId} />

@@ -1,5 +1,6 @@
 import Message from "./Message.entity";
 
 export interface MessageInterface {
-  send(message: Message): Promise<boolean>;
+  saveMessage(message: Message): Promise<void>;
+  getHistoryMessages(senderId: string, receiverId: string): Promise<Message[] | null>;
 }

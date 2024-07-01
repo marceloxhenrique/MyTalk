@@ -1,13 +1,13 @@
 import Message from "../../domain/message/Message.entity";
 import { MessageInterface } from "../../domain/message/Message.repository";
 
-export default class SendMessage {
+export default class SaveMessage {
   constructor(private messageRepo: MessageInterface) {}
-  async execute(input: SendMessageInput): Promise<boolean> {
+  async execute(input: SendMessageInput): Promise<void> {
     if (input.content) {
       const sendMessage = new Message(input.senderId, input.receiverId, input.content);
-      const output = this.messageRepo.send(sendMessage);
-      return output;
+      await this.messageRepo.saveMessage(sendMessage);
+      return;
     }
     throw new Error("Message can not be empty");
   }
