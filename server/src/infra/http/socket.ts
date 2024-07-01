@@ -1,9 +1,10 @@
 import { Server as SocketIOServer } from "socket.io";
 import { Server as HttpServerType } from "http";
+import SaveMessage from "../../application/message/SaveMessage.usecase";
 
 export class WebsocketConnection {
   listOfUser: { userEmail: string; userId: string; socketId: string }[] = [];
-  constructor(private server: HttpServerType) {}
+  constructor(private server: HttpServerType, private saveMessage: SaveMessage) {}
   execute() {
     const io = new SocketIOServer(this.server, {
       cors: {
@@ -38,7 +39,12 @@ export class WebsocketConnection {
       socket.on(
         "privateMessages",
         (msg: { senderId: string; receiverId: string; content: string }) => {
-          const { senderId, receiverId } = msg;
+          const { senderId, receiverId, content } = msg;
+          this.saveMessage.execute({
+            content: content,
+            senderId: senderId,
+            receiverId: receiverId,
+          });
           const roomName = [senderId, receiverId].sort().join("-");
           io.to(roomName).emit("private_message", msg);
         }
@@ -47,3 +53,9 @@ export class WebsocketConnection {
     return io;
   }
 }
+
+type SendMessageInput = {
+  content: string;
+  senderId: string;
+  receiverId: string;
+};

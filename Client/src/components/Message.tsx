@@ -1,78 +1,59 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Search } from "lucide-react";
 import ChatWindownDrawer from "./ChatWindowDrawer";
+import axios from "axios";
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../contexts/AuthContext";
+import { socket } from "@/Socket";
+import { GetHistoryMessages } from "./GetHistoryMessages";
+const BACKEND_URL_BASE = import.meta.env.VITE_BACKEND_URL_BASE;
 
-const contacts = [
-  {
-    userId: "110982371-8732291923",
-    userName: "Lucas",
-    email: "lucas@gamil.com",
-  },
-  {
-    userId: "11099892371232221-8732291923",
-    userName: "Paul",
-    email: "paul@gamil.com",
-  },
-  {
-    userId: "110561333111871-8732291923",
-    userName: "Chloe",
-    email: "chloe@gamil.com",
-  },
-  {
-    userId: "1109123657-873220955623191923",
-    userName: "Marcelo",
-    email: "marcelo@gamil.com",
-  },
-  {
-    userId: "11099892123766371-8732291923",
-    userName: "Pedro",
-    email: "Pedro@gamil.com",
-  },
-  {
-    userId: "11059055661871-873229192ZEZE3",
-    userName: "Maria",
-    email: "maria@gamil.com",
-  },
-  {
-    userId: "11090019372123657-873229133434923",
-    userName: "Jane",
-    email: "jane@gamil.com",
-  },
-  {
-    userId: "110982281757-87322919232323123123",
-    userName: "Jane",
-    email: "jane@gamil.com",
-  },
-  {
-    userId: "110982371-8732291923223123",
-    userName: "Marcelo",
-    email: "marcelo@gamil.com",
-  },
-  {
-    userId: "11099892371-873229192312312",
-    userName: "Pedro",
-    email: "Pedro@gamil.com",
-  },
-  {
-    userId: "110561871-873229192311222",
-    userName: "Maria",
-    email: "maria@gamil.com",
-  },
-  {
-    userId: "1109123657-8732291923112",
-    userName: "Jane",
-    email: "jane@gamil.com",
-  },
-];
+const Message = ({
+  settings,
+}: {
+  settings: {
+    setReceiverId: React.Dispatch<React.SetStateAction<string | undefined>>;
+    setMessages: React.Dispatch<
+      React.SetStateAction<MessageProps[] | undefined>
+    >;
+  };
+}) => {
+  const currentUser = useContext(AuthContext);
+  const [previousReceiver, setPreviousReceiver] = useState<string>();
+  const [contacts, setContacts] = useState<OutPutContact[]>();
+  useEffect(() => {
+    const getContactList = async () => {
+      const res = await axios.get(
+        `${BACKEND_URL_BASE}/contacts/${currentUser?.currentUser?.id}`,
+        {
+          withCredentials: true,
+        },
+      );
+      setContacts(res.data);
+    };
+    getContactList();
+  }, [currentUser?.currentUser?.id]);
 
-const Message = () => {
-  contacts.sort((a, b) => a.userName.localeCompare(b.userName));
-  const openChatMessage = (contact: {
-    userId: string;
-    userName: string;
-    email: string;
-  }) => {
-    console.log(contact);
+  contacts?.sort((a, b) => a.email.localeCompare(b.email));
+
+  const handleCreateRoom = async (receiverId: string) => {
+    const message = await GetHistoryMessages(
+      currentUser!.currentUser!.id!,
+      receiverId,
+    );
+    console.log("MESSAGE", message);
+    settings.setMessages([]);
+    socket.emit("leaveRoom", {
+      userId: currentUser?.currentUser?.id,
+      receiverId: previousReceiver,
+    });
+
+    setPreviousReceiver(receiverId);
+    settings.setReceiverId(receiverId);
+    socket.emit("joinRoom", {
+      userId: currentUser?.currentUser?.id,
+      receiverId: receiverId,
+    });
   };
   return (
     <section className="h-[calc(100%-57px)] w-full flex-col md:w-96 md:p-4">
@@ -90,39 +71,51 @@ const Message = () => {
         </div>
         <ScrollArea className="flex w-full px-3 py-4 md:p-4">
           <ul className="md:hidden">
-            {contacts.map((contact) => (
-              <ChatWindownDrawer key={contact.userId}>
+            {contacts ? (
+              contacts.map((contact) => (
+                <ChatWindownDrawer key={contact.contactId}>
+                  <li
+                    className="group my-2 flex cursor-pointer flex-row items-center gap-2 rounded-md border border-gray-300 bg-background p-4 text-sm shadow-md hover:bg-primaryColorlt"
+                    onClick={() => handleCreateRoom(contact.contactId)}
+                  >
+                    <span className="flex h-12 w-12 items-center justify-center rounded-full border border-gray-300 bg-primaryColorlt text-xl text-primaryColor group-hover:bg-secondaryColor">
+                      {contact.contactName.slice(0, 1).toUpperCase()}
+                    </span>
+                    <div className="flex flex-col justify-center">
+                      <p className="text-lg">{contact.contactName}</p>
+                      <p className="text-gray-500">{contact.email}</p>
+                    </div>
+                  </li>
+                </ChatWindownDrawer>
+              ))
+            ) : (
+              <div className="flex w-full justify-center text-primaryColorlt">
+                No contacts found
+              </div>
+            )}
+          </ul>
+          <ul className="hidden md:block">
+            {contacts ? (
+              contacts.map((contact) => (
                 <li
+                  key={contact.contactId}
                   className="group my-2 flex cursor-pointer flex-row items-center gap-2 rounded-md border border-gray-300 bg-background p-4 text-sm shadow-md hover:bg-primaryColorlt"
-                  onClick={() => openChatMessage(contact)}
+                  onClick={() => handleCreateRoom(contact.contactId)}
                 >
                   <span className="flex h-12 w-12 items-center justify-center rounded-full border border-gray-300 bg-primaryColorlt text-xl text-primaryColor group-hover:bg-secondaryColor">
-                    {contact.userName.slice(0, 1).toUpperCase()}
+                    {contact.contactName.slice(0, 1).toUpperCase()}
                   </span>
                   <div className="flex flex-col justify-center">
-                    <p className="text-lg">{contact.userName}</p>
+                    <p className="text-lg">{contact.contactName}</p>
                     <p className="text-gray-500">{contact.email}</p>
                   </div>
                 </li>
-              </ChatWindownDrawer>
-            ))}
-          </ul>
-          <ul className="hidden md:block">
-            {contacts.map((contact) => (
-              <li
-                key={contact.userId}
-                className="group my-2 flex cursor-pointer flex-row items-center gap-2 rounded-md border border-gray-300 bg-background p-4 text-sm shadow-md hover:bg-primaryColorlt"
-                onClick={() => openChatMessage(contact)}
-              >
-                <span className="flex h-12 w-12 items-center justify-center rounded-full border border-gray-300 bg-primaryColorlt text-xl text-primaryColor group-hover:bg-secondaryColor">
-                  {contact.userName.slice(0, 1).toUpperCase()}
-                </span>
-                <div className="flex flex-col justify-center">
-                  <p className="text-lg">{contact.userName}</p>
-                  <p className="text-gray-500">{contact.email}</p>
-                </div>
-              </li>
-            ))}
+              ))
+            ) : (
+              <div className="flex w-full justify-center text-primaryColorlt">
+                No contacts found
+              </div>
+            )}
           </ul>
         </ScrollArea>
       </fieldset>
@@ -131,3 +124,17 @@ const Message = () => {
 };
 
 export default Message;
+
+type MessageProps = {
+  senderId: string | undefined;
+  receiverId: string | undefined;
+  content: string | undefined;
+};
+
+type OutPutContact = {
+  id: string;
+  contactId: string;
+  email: string;
+  contactName: string;
+  userId: string;
+};

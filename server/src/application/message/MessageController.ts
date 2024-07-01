@@ -1,15 +1,21 @@
 import { HttpServer } from "../../adapters/HttpServer";
 import { MessageInterface } from "../../domain/message/Message.repository";
-import SendMessage from "./SendMessage.usecase";
+import TokenService from "../../domain/services/TokenService";
+import GetMessageHistory from "./GetMessageHistory";
 
 export default class MessageController {
-  constructor(private httpServer: HttpServer, private messageRepo: MessageInterface) {
-    httpServer.on("post", "/api/message", async (req, res) => {
+  constructor(
+    private httpServer: HttpServer,
+    private messageRepo: MessageInterface,
+    private tokenService: TokenService
+  ) {
+    httpServer.on("get", "/api/message/:senderId/:receiverId", async (req, res) => {
       try {
-        const message = req.body;
-        const sendMessage = new SendMessage(messageRepo);
-        const result = await sendMessage.execute(message);
-        res.status(201).json({ message: "Message sent" });
+        tokenService.verifyToken(req.cookies.MyTalk_Token);
+        const { senderId, receiverId } = req.params;
+        const getMessageHistory = new GetMessageHistory(messageRepo);
+        const result = await getMessageHistory.execute(senderId, receiverId);
+        res.status(201).json(result);
       } catch (error) {
         res.status(401).json(error);
       }

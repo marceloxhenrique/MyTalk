@@ -1,11 +1,10 @@
-import { timeStamp } from "console";
-import SendMessage from "../src/application/message/SendMessage.usecase";
+import SaveMessage from "../src/application/message/SaveMessage.usecase";
 import MessageInMemory from "../src/infra/db/Message.inmemory";
 
 describe("Test for send messages use case", () => {
   it("Should Send a message", async () => {
     const sendMessageInMemory = new MessageInMemory();
-    const sendMessage = new SendMessage(sendMessageInMemory);
+    const saveMessage = new SaveMessage(sendMessageInMemory);
 
     const message = {
       senderId: "3727f5de-303b-4bc9-81e0-111c0e97a84",
@@ -13,7 +12,6 @@ describe("Test for send messages use case", () => {
       content: "Hello world!",
     };
 
-    const result = await sendMessage.execute(message);
-    expect(result).toBeDefined();
+    await expect(saveMessage.execute(message)).resolves.not.toThrow();
   });
 });
