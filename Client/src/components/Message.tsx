@@ -37,23 +37,36 @@ const Message = ({
   contacts?.sort((a, b) => a.email.localeCompare(b.email));
 
   const handleCreateRoom = async (receiverId: string) => {
-    const message = await GetHistoryMessages(
-      currentUser!.currentUser!.id!,
-      receiverId,
-    );
-    console.log("MESSAGE", message);
-    settings.setMessages([]);
-    socket.emit("leaveRoom", {
-      userId: currentUser?.currentUser?.id,
-      receiverId: previousReceiver,
-    });
+    if (currentUser?.currentUser?.id) {
+      try {
+        const message = await GetHistoryMessages(
+          currentUser.currentUser.id,
+          receiverId,
+        );
 
-    setPreviousReceiver(receiverId);
-    settings.setReceiverId(receiverId);
-    socket.emit("joinRoom", {
-      userId: currentUser?.currentUser?.id,
-      receiverId: receiverId,
-    });
+        settings.setMessages([]);
+        socket.emit("leaveRoom", {
+          userId: currentUser?.currentUser?.id,
+          receiverId: previousReceiver,
+        });
+
+        if (message) {
+          settings.setMessages(
+            message.sort((a: MessageProps, b: MessageProps) =>
+              a.sentAt?.localeCompare(b.sentAt ?? ""),
+            ),
+          );
+        }
+        setPreviousReceiver(receiverId);
+        settings.setReceiverId(receiverId);
+        socket.emit("joinRoom", {
+          userId: currentUser?.currentUser?.id,
+          receiverId: receiverId,
+        });
+      } catch (error) {
+        console.error("Error creating room", error);
+      }
+    }
   };
   return (
     <section className="h-[calc(100%-57px)] w-full flex-col md:w-96 md:p-4">
@@ -129,6 +142,8 @@ type MessageProps = {
   senderId: string | undefined;
   receiverId: string | undefined;
   content: string | undefined;
+  id?: string;
+  sentAt?: string;
 };
 
 type OutPutContact = {

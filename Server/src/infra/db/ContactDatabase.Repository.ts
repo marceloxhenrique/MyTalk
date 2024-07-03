@@ -1,9 +1,20 @@
 import Contact from "../../domain/contact/Contact.entity";
 import { ContactRepositoryInterface } from "../../domain/contact/Contact.repository";
 import Connection from "../../domain/services/Connection";
+import User from "../../domain/user/User.entity";
 
 export default class ContactDatabaseRepository implements ContactRepositoryInterface {
   constructor(private connection: Connection) {}
+  async findUserByEmail(email: string): Promise<User | null> {
+    const res = await this.connection.query(`SELECT * FROM public.user WHERE email = $1`, [email]);
+
+    if (res.length === 0) {
+      return null;
+    }
+    const row = res[0];
+
+    return new User(row.email, row.password, row.user_name, row.id);
+  }
   async addContact(contact: Contact): Promise<void> {
     this.connection.query(
       `INSERT INTO public.contact (id, contact_id, email, contact_name, user_id) values ($1, $2, $3, $4, $5)`,
@@ -16,10 +27,11 @@ export default class ContactDatabaseRepository implements ContactRepositoryInter
       ]
     );
   }
-  async findContactByEmail(email: string): Promise<Contact | null> {
-    const res = await this.connection.query(`SELECT * FROM public.contact WHERE email = $1`, [
-      email,
-    ]);
+  async findContactByEmail(email: string, userId: string): Promise<Contact | null> {
+    const res = await this.connection.query(
+      `SELECT * FROM public.contact WHERE email = $1 AND user_id = $2`,
+      [email, userId]
+    );
     if (res.length === 0) {
       return null;
     }
