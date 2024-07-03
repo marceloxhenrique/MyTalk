@@ -1,7 +1,6 @@
 import { HttpServer } from "../../adapters/HttpServer";
 import { ContactRepositoryInterface } from "../../domain/contact/Contact.repository";
 import TokenService from "../../domain/services/TokenService";
-import { UserRepositoryInterface } from "../../domain/user/User.repository";
 import AddContact from "./AddContact.usecase";
 import GetAllContacts from "./GetAllContacts.usecase";
 
@@ -9,12 +8,11 @@ export default class ContactController {
   constructor(
     private contactRepository: ContactRepositoryInterface,
     readonly httpServer: HttpServer,
-    private tokenService: TokenService,
-    private userRepository: UserRepositoryInterface
+    private tokenService: TokenService
   ) {
     httpServer.on("post", "/api/contact", async (req, res) => {
       try {
-        const addContact = new AddContact(contactRepository, tokenService, userRepository);
+        const addContact = new AddContact(contactRepository, tokenService);
         await addContact.execute(req.body, req.cookies.MyTalk_Token);
         res.status(201).json("Contact created");
       } catch (error) {

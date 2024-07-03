@@ -18,11 +18,15 @@ export const Header = () => {
   const navigate = useNavigate();
   const user = useContext(AuthContext);
   const handleLogout = async () => {
-    await axios.get(`${BACKEND_URL_BASE}/logout`, {
-      withCredentials: true,
-    });
-    user?.logOut();
-    navigate("/");
+    try {
+      await axios.get(`${BACKEND_URL_BASE}/logout`, {
+        withCredentials: true,
+      });
+      user?.logOut();
+      navigate("/");
+    } catch (error) {
+      console.error(error);
+    }
   };
   return (
     <header className="top-0 z-10 flex h-[57px] items-center justify-between border-b border-gray-300 px-4">
@@ -47,9 +51,9 @@ export const Header = () => {
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={handleLogout}>
             <LogOut className="mr-2 h-4 w-4" />
-            <span onClick={handleLogout}>Log out</span>
+            <span>Log out</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

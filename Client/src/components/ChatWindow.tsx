@@ -8,6 +8,8 @@ type ChatProps = {
   senderId: string | undefined;
   receiverId: string | undefined;
   content: string | undefined;
+  id?: string;
+  sentAt?: string;
 };
 
 export default function ChatWindow({
@@ -41,8 +43,8 @@ export default function ChatWindow({
   }, [messages]);
   return (
     <section className="relative hidden h-full w-full md:flex md:flex-1 md:py-4 md:pr-4">
-      <div className="relative flex h-full w-full flex-col gap-5 border border-gray-300 bg-gray-300 p-4 md:rounded-md">
-        <ScrollArea className="flex-1 p-4">
+      <div className="relative flex h-full w-full flex-col gap-5 border border-gray-300 bg-gray-100 p-1 md:rounded-md">
+        <ScrollArea className="flex-1 p-1">
           <ul className="flex-1">
             {messages &&
               messages.map((item, index) =>
@@ -67,12 +69,11 @@ export default function ChatWindow({
           onSubmit={(e: FormEvent<HTMLFormElement>) => {
             handlesubmit(e);
           }}
-          className="flex flex-row overflow-hidden rounded-md bg-blue-500 focus-within:ring-1 focus-within:ring-primaryColor"
+          className="m-2 flex flex-row overflow-hidden rounded-md focus-within:ring-1 focus-within:ring-primaryColor"
         >
           <textarea
             ref={textareaRef}
             value={message}
-            id=""
             autoFocus
             name="UserInput"
             onChange={(e) => {
@@ -83,7 +84,7 @@ export default function ChatWindow({
           />
           <button
             type="submit"
-            className="cursor-pointer bg-primaryColor px-6 text-lg text-secondaryColor"
+            className="cursor-pointer bg-primaryColor px-6 text-lg text-secondaryColor hover:bg-blue-500"
           >
             <SendHorizontal />
           </button>

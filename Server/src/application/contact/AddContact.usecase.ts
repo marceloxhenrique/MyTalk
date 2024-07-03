@@ -1,18 +1,16 @@
 import Contact from "../../domain/contact/Contact.entity";
 import { ContactRepositoryInterface } from "../../domain/contact/Contact.repository";
 import TokenService from "../../domain/services/TokenService";
-import { UserRepositoryInterface } from "../../domain/user/User.repository";
 
 export default class AddContact {
   constructor(
     private contactRepository: ContactRepositoryInterface,
-    private tokenService: TokenService,
-    private userRepository: UserRepositoryInterface
+    private tokenService: TokenService
   ) {}
 
   async execute(input: CreateContactInput, token: string) {
-    const isValidEmail = await this.userRepository.findByEmail(input.email);
-    const contactExist = await this.contactRepository.findContactByEmail(input.email);
+    const isValidEmail = await this.contactRepository.findUserByEmail(input.email);
+    const contactExist = await this.contactRepository.findContactByEmail(input.email, input.userId);
     const isValidToken = this.tokenService.verifyToken(token);
 
     if (isValidToken && contactExist === null && isValidEmail != null) {

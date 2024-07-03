@@ -23,10 +23,5 @@ const websocketConnection = new WebsocketConnection(httpServer.serverSocket(), s
 websocketConnection.execute();
 
 new MessageController(httpServer, messageDatabaseRepository, jwtTokenService);
-new ContactController(
-  contactDatabaseRepository,
-  httpServer,
-  jwtTokenService,
-  userDatabaseRepository
-);
+new ContactController(contactDatabaseRepository, httpServer, jwtTokenService);
 new UserController(userDatabaseRepository, httpServer, jwtTokenService);

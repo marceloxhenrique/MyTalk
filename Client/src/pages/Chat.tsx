@@ -18,6 +18,8 @@ type MessageProps = {
   senderId: string | undefined;
   receiverId: string | undefined;
   content: string | undefined;
+  id?: string;
+  sentAt?: string;
 };
 
 export const Chat = () => {
