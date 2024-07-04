@@ -12,14 +12,16 @@ const Message = ({
   settings,
 }: {
   settings: {
-    setReceiverId: React.Dispatch<React.SetStateAction<string | undefined>>;
+    setReceiver: React.Dispatch<
+      React.SetStateAction<OutPutContact | undefined>
+    >;
     setMessages: React.Dispatch<
       React.SetStateAction<MessageProps[] | undefined>
     >;
   };
 }) => {
   const currentUser = useContext(AuthContext);
-  const [previousReceiver, setPreviousReceiver] = useState<string>();
+  const [previousReceiver, setPreviousReceiver] = useState<OutPutContact>();
   const [contacts, setContacts] = useState<OutPutContact[]>();
   useEffect(() => {
     const getContactList = async () => {
@@ -36,12 +38,12 @@ const Message = ({
 
   contacts?.sort((a, b) => a.email.localeCompare(b.email));
 
-  const handleCreateRoom = async (receiverId: string) => {
+  const handleCreateRoom = async (contact: OutPutContact) => {
     if (currentUser?.currentUser?.id) {
       try {
         const message = await GetHistoryMessages(
           currentUser.currentUser.id,
-          receiverId,
+          contact.contactId,
         );
 
         settings.setMessages([]);
@@ -57,11 +59,11 @@ const Message = ({
             ),
           );
         }
-        setPreviousReceiver(receiverId);
-        settings.setReceiverId(receiverId);
+        setPreviousReceiver(contact);
+        settings.setReceiver(contact);
         socket.emit("joinRoom", {
           userId: currentUser?.currentUser?.id,
-          receiverId: receiverId,
+          receiverId: contact.contactId,
         });
       } catch (error) {
         console.error("Error creating room", error);
@@ -85,11 +87,11 @@ const Message = ({
         <ScrollArea className="flex w-full px-3 py-4 md:p-4">
           <ul className="md:hidden">
             {contacts ? (
-              contacts.map((contact) => (
+              contacts.map((contact: OutPutContact) => (
                 <ChatWindownDrawer key={contact.contactId}>
                   <li
                     className="group my-2 flex cursor-pointer flex-row items-center gap-2 rounded-md border border-gray-300 bg-background p-4 text-sm shadow-md hover:bg-primaryColorlt"
-                    onClick={() => handleCreateRoom(contact.contactId)}
+                    onClick={() => handleCreateRoom(contact)}
                   >
                     <span className="flex h-12 w-12 items-center justify-center rounded-full border border-gray-300 bg-primaryColorlt text-xl text-primaryColor group-hover:bg-secondaryColor">
                       {contact.contactName.slice(0, 1).toUpperCase()}
@@ -113,7 +115,7 @@ const Message = ({
                 <li
                   key={contact.contactId}
                   className="group my-2 flex cursor-pointer flex-row items-center gap-2 rounded-md border border-gray-300 bg-background p-4 text-sm shadow-md hover:bg-primaryColorlt"
-                  onClick={() => handleCreateRoom(contact.contactId)}
+                  onClick={() => handleCreateRoom(contact)}
                 >
                   <span className="flex h-12 w-12 items-center justify-center rounded-full border border-gray-300 bg-primaryColorlt text-xl text-primaryColor group-hover:bg-secondaryColor">
                     {contact.contactName.slice(0, 1).toUpperCase()}

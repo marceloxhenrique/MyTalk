@@ -35,6 +35,25 @@ export default class MessageDatabaseRespository implements MessageInterface {
       ]
     );
   }
+
+  async getLastMessage(senderId: string): Promise<Message[] | null> {
+    const res = await this.connection.query(`SELECT * FROM public.message WHERE user_id = $1`, [
+      senderId,
+    ]);
+    if (res.length === 0) return null;
+    const allMessages: Message[] = [];
+    res.map((message: MessageOutput) => {
+      const newMessage = new Message(
+        message.user_id,
+        message.contact_id,
+        message.content,
+        message.id,
+        message.sent_at
+      );
+      allMessages.push(newMessage);
+    });
+    return allMessages;
+  }
 }
 
 type MessageOutput = {
