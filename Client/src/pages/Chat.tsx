@@ -1,7 +1,7 @@
 import { AddContact } from "@/components/AddContact";
 import { Header } from "@/components/Header";
 import { Nav } from "@/components/Nav";
-import { Contact } from "@/components/Contact";
+// import { Contact } from "@/components/Contact";
 import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "@/contexts/AuthContext";
 import { socket } from "@/Socket";
@@ -24,7 +24,7 @@ type MessageProps = {
 
 export const Chat = () => {
   const user = useContext(AuthContext);
-  const [receiverId, setReceiverId] = useState<string>();
+  const [receiver, setReceiver] = useState<OutPutContact>();
   const [messages, setMessages] = useState<MessageProps[] | undefined>([]);
   const [item, setItem] = useState<keyof typeof ListChoice>("newContact");
 
@@ -46,17 +46,17 @@ export const Chat = () => {
     };
   }, [user]);
 
-  const [userList, setUserList] = useState<
-    {
-      userEmail: string;
-      userId: string;
-      socketId: string;
-    }[]
-  >();
+  // const [userList, setUserList] = useState<
+  //   {
+  //     userEmail: string;
+  //     userId: string;
+  //     socketId: string;
+  //   }[]
+  // >();
 
-  socket.on("listOfUsers", (list) => {
-    setUserList(list);
-  });
+  // socket.on("listOfUsers", (list) => {
+  //   setUserList(list);
+  // });
 
   socket.on(
     "private_message",
@@ -72,15 +72,23 @@ export const Chat = () => {
         <div className="flex h-[calc(100%-7px)] w-full flex-col md:max-w-sm">
           <Nav setItem={setItem} />
           {item === "newContact" && (
-            <Contact settings={{ setReceiverId, setMessages, userList }} />
+            <p></p>
+            // <Contact settings={{ setReceiver, setMessages, userList }} />
           )}
           {item === "newMessage" && (
-            <Message settings={{ setReceiverId, setMessages }} />
+            <Message settings={{ setReceiver, setMessages }} />
           )}
           {item === "addContact" && <AddContact />}
         </div>
-        <ChatWindow messages={messages} receiverId={receiverId} />
+        <ChatWindow messages={messages} receiver={receiver} />
       </section>
     </main>
   );
+};
+type OutPutContact = {
+  id: string;
+  contactId: string;
+  email: string;
+  contactName: string;
+  userId: string;
 };

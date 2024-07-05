@@ -11,13 +11,20 @@ type ChatProps = {
   id?: string;
   sentAt?: string;
 };
+type OutPutContact = {
+  id: string;
+  contactId: string;
+  email: string;
+  contactName: string;
+  userId: string;
+};
 
 export default function ChatWindow({
   messages,
-  receiverId,
+  receiver,
 }: {
   messages: ChatProps[] | undefined;
-  receiverId: string | undefined;
+  receiver: OutPutContact | undefined;
 }) {
   const user = useContext(AuthContext);
   const scrollBottom = useRef<HTMLDivElement>(null);
@@ -25,10 +32,10 @@ export default function ChatWindow({
   const [message, setMessage] = useState("");
   const handlesubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (message.length > 0 && receiverId) {
+    if (message.length > 0 && receiver?.contactId) {
       socket.emit("privateMessages", {
         senderId: user?.currentUser?.id,
-        receiverId: receiverId,
+        receiverId: receiver.contactId,
         content: message,
       });
       setMessage("");
@@ -42,10 +49,22 @@ export default function ChatWindow({
     }
   }, [messages]);
   return (
-    <section className="relative hidden h-full w-full md:flex md:flex-1 md:py-4 md:pr-4">
+    <section className="relative hidden h-full w-full flex-col md:flex md:flex-1 md:py-4 md:pr-4">
       <div className="relative flex h-full w-full flex-col gap-5 border border-gray-300 bg-gray-100 p-1 md:rounded-md">
         <ScrollArea className="flex-1 p-1">
-          <ul className="flex-1">
+          {receiver && (
+            <div className="fixed flex flex-row gap-3 rounded-sm bg-gray-100 p-2">
+              <span className="flex h-12 w-12 items-center justify-center rounded-full border border-gray-300 bg-primaryColorlt text-xl text-primaryColor group-hover:bg-secondaryColor">
+                {receiver?.contactName.slice(0, 1).toUpperCase()}
+              </span>
+              <div>
+                <p>{receiver?.contactName}</p>
+                <p>{receiver?.email}</p>
+              </div>
+            </div>
+          )}
+
+          <ul className="flex-1 pt-14">
             {messages &&
               messages.map((item, index) =>
                 item.senderId == user?.currentUser?.id ? (
