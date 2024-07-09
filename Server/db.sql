@@ -30,3 +30,4 @@ CREATE TABLE public.message (
   CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES public.user(id),
   CONSTRAINT fk_contact FOREIGN KEY(contact_id, user_id) REFERENCES public.contact(contact_id, user_id)
 );
+
