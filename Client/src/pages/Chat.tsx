@@ -1,7 +1,7 @@
 import { AddContact } from "@/components/AddContact";
 import { Header } from "@/components/Header";
 import { Nav } from "@/components/Nav";
-// import { Contact } from "@/components/Contact";
+import { Contact } from "@/components/Contact";
 import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "@/contexts/AuthContext";
 import { socket } from "@/Socket";
@@ -46,18 +46,6 @@ export const Chat = () => {
     };
   }, [user]);
 
-  // const [userList, setUserList] = useState<
-  //   {
-  //     userEmail: string;
-  //     userId: string;
-  //     socketId: string;
-  //   }[]
-  // >();
-
-  // socket.on("listOfUsers", (list) => {
-  //   setUserList(list);
-  // });
-
   socket.on(
     "private_message",
     (msg: { senderId: string; receiverId: string; content: string }) => {
@@ -72,8 +60,7 @@ export const Chat = () => {
         <div className="flex h-[calc(100%-7px)] w-full flex-col md:max-w-sm">
           <Nav setItem={setItem} />
           {item === "newContact" && (
-            <p></p>
-            // <Contact settings={{ setReceiver, setMessages, userList }} />
+            <Contact settings={{ setReceiver, setMessages }} />
           )}
           {item === "newMessage" && (
             <Message settings={{ setReceiver, setMessages }} />
