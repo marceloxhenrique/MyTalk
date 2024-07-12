@@ -36,32 +36,26 @@ export default class MessageDatabaseRespository implements MessageInterface {
     );
   }
 
-  async getLastMessage(senderId: string): Promise<any | null> {
+  async getLastMessage(senderId: string): Promise<Message[] | null> {
+    console.log("ID", senderId);
     const res = await this.connection.query(
-      `SELECT 
-        m.id AS message_id,
-        m.content AS message_content,
-        m.user_id AS messge_user_id,
-        m.contact_id AS message_contact_id,
-        m.sent_at AS message_sent_at,
-        c.id AS contact_id,
-        c.contact_id AS contact_contact_id,
-        c.email AS contact_email,
-        c.contact_name AS contact_contact_name,
-        c.user_id AS contact_user_id
-        FROM public.message AS m 
-        JOIN public.contact AS c ON m.user_id = c.user_id 
-        WHERE m.user_id = $1 
-        ORDER BY m.sent_at DESC;`,
+      `SELECT * FROM public.message WHERE contact_id = $1 
+        ORDER BY sent_at DESC;`,
       [senderId]
     );
     if (res.length === 0) return null;
-    const allMessages: LastMessageOutput[] = [];
-    console.log("RESULT", res);
-    for (let lastMessage of res) {
-      console.log(lastMessage.contact_contact_name);
-    }
-    return res;
+    const allMessages: Message[] = [];
+    res.map((message: MessageOutput) => {
+      const newMessage = new Message(
+        message.user_id,
+        message.contact_id,
+        message.content,
+        message.id,
+        message.sent_at
+      );
+      allMessages.push(newMessage);
+    });
+    return allMessages;
   }
 }
 
@@ -71,17 +65,4 @@ type MessageOutput = {
   user_id: string;
   contact_id: string;
   sent_at: Date;
-};
-
-type LastMessageOutput = {
-  message_id: string;
-  message_content: string;
-  messge_user_id: string;
-  message_contact_id: string;
-  message_sent_at: string;
-  contact_id: string;
-  contact_contact_id: string;
-  contact_email: string;
-  contact_contact_name: string;
-  contact_user_id: string;
 };

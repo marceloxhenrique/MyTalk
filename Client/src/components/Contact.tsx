@@ -40,8 +40,9 @@ export function Contact({
   const currentUser = useContext(AuthContext);
   const [previousReceiver, setPreviousReceiver] = useState<OutPutContact>();
   const [contacts, setContacts] = useState<OutPutContact[]>();
+  const [lastMessages, setLastMessages] = useState<MessageProps[]>();
   useEffect(() => {
-    const GetListOfLastMessagesSend = async () => {
+    const GetListOfContacts = async () => {
       const res = await axios.get(
         `${BACKEND_URL_BASE}/contacts/${currentUser?.currentUser?.id}`,
         {
@@ -50,17 +51,22 @@ export function Contact({
       );
       setContacts(res.data);
     };
-    GetListOfLastMessagesSend();
+    GetListOfContacts();
+    const getListOfLastMessagesReceived = async () => {
+      if (currentUser?.currentUser) {
+        const lastMessagesReceived = await GetLastMessageSend(
+          currentUser.currentUser.id!,
+        );
+        setLastMessages(lastMessagesReceived);
+      }
+    };
+    getListOfLastMessagesReceived();
   }, [currentUser?.currentUser?.id]);
 
   contacts?.sort((a, b) => a.email.localeCompare(b.email));
 
   const handleCreateRoom = async (contact: OutPutContact) => {
     if (currentUser?.currentUser?.id) {
-      const lastMessage = await GetLastMessageSend(
-        currentUser?.currentUser?.id,
-      );
-      console.log("LastMessage", lastMessage);
       try {
         const message = await GetHistoryMessages(
           currentUser.currentUser.id,
@@ -90,6 +96,12 @@ export function Contact({
         console.error("Error creating room", error);
       }
     }
+  };
+  const findMessageBycontactId = (contactId: string) => {
+    const lastMessageByContactId = lastMessages?.find(
+      (item) => item.senderId === contactId,
+    );
+    return lastMessageByContactId?.content;
   };
   return (
     <section className="h-[calc(100%-57px)] w-full flex-col md:w-96 md:p-4">
@@ -143,7 +155,9 @@ export function Contact({
                   </span>
                   <div className="flex flex-col justify-center">
                     <p className="text-lg">{contact.contactName}</p>
-                    <p className="text-gray-500">{contact.email}</p>
+                    <p className="text-gray-500">
+                      {findMessageBycontactId(contact.contactId)}
+                    </p>
                   </div>
                 </li>
               ))
