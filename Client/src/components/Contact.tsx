@@ -61,7 +61,7 @@ export function Contact({
       }
     };
     getListOfLastMessagesReceived();
-  }, [currentUser?.currentUser?.id]);
+  }, [currentUser?.currentUser, currentUser?.currentUser?.id]);
 
   contacts?.sort((a, b) => a.email.localeCompare(b.email));
 
@@ -131,7 +131,9 @@ export function Contact({
                     </span>
                     <div className="flex flex-col justify-center">
                       <p className="text-lg">{contact.contactName}</p>
-                      <p className="text-gray-500">{contact.email}</p>
+                      <p className="text-gray-500">
+                        {findMessageBycontactId(contact.contactId)}
+                      </p>
                     </div>
                   </li>
                 </ChatWindownDrawer>
@@ -143,7 +145,7 @@ export function Contact({
             )}
           </ul>
           <ul className="hidden md:block">
-            {contacts ? (
+            {contacts && lastMessages && lastMessages.length > 0 ? (
               contacts.map((contact) => (
                 <li
                   key={contact.contactId}
@@ -163,7 +165,7 @@ export function Contact({
               ))
             ) : (
               <div className="flex w-full justify-center text-primaryColorlt">
-                No contacts found
+                No messages found
               </div>
             )}
           </ul>
