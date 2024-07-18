@@ -63,7 +63,6 @@ export default function ChatWindow({
               </div>
             </div>
           )}
-
           <ul className="flex-1 pt-14">
             {messages &&
               messages.map((item, index) =>

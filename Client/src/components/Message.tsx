@@ -7,7 +7,13 @@ import { AuthContext } from "../contexts/AuthContext";
 import { socket } from "@/Socket";
 import { GetHistoryMessages } from "./GetHistoryMessages";
 const BACKEND_URL_BASE = import.meta.env.VITE_BACKEND_URL_BASE;
-
+type ChatProps = {
+  senderId: string | undefined;
+  receiverId: string | undefined;
+  content: string | undefined;
+  id?: string;
+  sentAt?: string;
+};
 const Message = ({
   settings,
 }: {
@@ -18,6 +24,8 @@ const Message = ({
     setMessages: React.Dispatch<
       React.SetStateAction<MessageProps[] | undefined>
     >;
+    messages: ChatProps[] | undefined;
+    receiver: OutPutContact | undefined;
   };
 }) => {
   const currentUser = useContext(AuthContext);
@@ -88,7 +96,11 @@ const Message = ({
           <ul className="md:hidden">
             {contacts ? (
               contacts.map((contact: OutPutContact) => (
-                <ChatWindownDrawer key={contact.contactId}>
+                <ChatWindownDrawer
+                  key={contact.contactId}
+                  messages={settings.messages}
+                  receiver={settings.receiver}
+                >
                   <li
                     className="group my-2 flex cursor-pointer flex-row items-center gap-2 rounded-md border border-gray-300 bg-background p-4 text-sm shadow-md hover:bg-primaryColorlt"
                     onClick={() => handleCreateRoom(contact)}

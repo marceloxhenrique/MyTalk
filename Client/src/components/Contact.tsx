@@ -24,6 +24,13 @@ type OutPutContact = {
   contactName: string;
   userId: string;
 };
+type ChatProps = {
+  senderId: string | undefined;
+  receiverId: string | undefined;
+  content: string | undefined;
+  id?: string;
+  sentAt?: string;
+};
 
 export function Contact({
   settings,
@@ -35,6 +42,8 @@ export function Contact({
     setMessages: React.Dispatch<
       React.SetStateAction<MessageProps[] | undefined>
     >;
+    messages: ChatProps[] | undefined;
+    receiver: OutPutContact | undefined;
   };
 }) {
   const currentUser = useContext(AuthContext);
@@ -119,50 +128,69 @@ export function Contact({
         </div>
         <ScrollArea className="flex w-full px-3 py-4 md:p-4">
           <ul className="md:hidden">
-            {contacts ? (
-              contacts.map((contact: OutPutContact) => (
-                <ChatWindownDrawer key={contact.contactId}>
-                  <li
-                    className="group my-2 flex cursor-pointer flex-row items-center gap-2 rounded-md border border-gray-300 bg-background p-4 text-sm shadow-md hover:bg-primaryColorlt"
-                    onClick={() => handleCreateRoom(contact)}
-                  >
-                    <span className="flex h-12 w-12 items-center justify-center rounded-full border border-gray-300 bg-primaryColorlt text-xl text-primaryColor group-hover:bg-secondaryColor">
-                      {contact.contactName.slice(0, 1).toUpperCase()}
-                    </span>
-                    <div className="flex flex-col justify-center">
-                      <p className="text-lg">{contact.contactName}</p>
-                      <p className="text-gray-500">
-                        {findMessageBycontactId(contact.contactId)}
-                      </p>
-                    </div>
-                  </li>
-                </ChatWindownDrawer>
-              ))
+            {lastMessages ? (
+              contacts?.map(
+                (contact) =>
+                  findMessageBycontactId(contact.contactId) && (
+                    <ChatWindownDrawer
+                      key={contact.contactId}
+                      messages={settings.messages}
+                      receiver={settings.receiver}
+                    >
+                      <li
+                        key={contact.contactId}
+                        className="group my-2 flex cursor-pointer flex-row items-center gap-2 rounded-md border border-gray-300 bg-background p-4 text-sm shadow-md hover:bg-primaryColorlt"
+                        onClick={() => handleCreateRoom(contact)}
+                      >
+                        <span className="flex h-12 w-12 items-center justify-center rounded-full border border-gray-300 bg-primaryColorlt text-xl text-primaryColor group-hover:bg-secondaryColor">
+                          {contact.contactName.slice(0, 1).toUpperCase()}
+                        </span>
+                        <div className="flex flex-col justify-center">
+                          <p className="text-lg">{contact.contactName}</p>
+                          <p className="text-gray-500">
+                            {findMessageBycontactId(contact.contactId)?.slice(
+                              0,
+                              25,
+                            )}
+                            ...
+                          </p>
+                        </div>
+                      </li>
+                    </ChatWindownDrawer>
+                  ),
+              )
             ) : (
               <div className="flex w-full justify-center text-primaryColorlt">
-                No contacts found
+                No messages found
               </div>
             )}
           </ul>
           <ul className="hidden md:block">
-            {contacts && lastMessages && lastMessages.length > 0 ? (
-              contacts.map((contact) => (
-                <li
-                  key={contact.contactId}
-                  className="group my-2 flex cursor-pointer flex-row items-center gap-2 rounded-md border border-gray-300 bg-background p-4 text-sm shadow-md hover:bg-primaryColorlt"
-                  onClick={() => handleCreateRoom(contact)}
-                >
-                  <span className="flex h-12 w-12 items-center justify-center rounded-full border border-gray-300 bg-primaryColorlt text-xl text-primaryColor group-hover:bg-secondaryColor">
-                    {contact.contactName.slice(0, 1).toUpperCase()}
-                  </span>
-                  <div className="flex flex-col justify-center">
-                    <p className="text-lg">{contact.contactName}</p>
-                    <p className="text-gray-500">
-                      {findMessageBycontactId(contact.contactId)}
-                    </p>
-                  </div>
-                </li>
-              ))
+            {lastMessages ? (
+              contacts?.map(
+                (contact) =>
+                  findMessageBycontactId(contact.contactId) && (
+                    <li
+                      key={contact.contactId}
+                      className="group my-2 flex cursor-pointer flex-row items-center gap-2 rounded-md border border-gray-300 bg-background p-4 text-sm shadow-md hover:bg-primaryColorlt"
+                      onClick={() => handleCreateRoom(contact)}
+                    >
+                      <span className="flex h-12 w-12 items-center justify-center rounded-full border border-gray-300 bg-primaryColorlt text-xl text-primaryColor group-hover:bg-secondaryColor">
+                        {contact.contactName.slice(0, 1).toUpperCase()}
+                      </span>
+                      <div className="flex flex-col justify-center">
+                        <p className="text-lg">{contact.contactName}</p>
+                        <p className="text-gray-500">
+                          {findMessageBycontactId(contact.contactId)?.slice(
+                            0,
+                            25,
+                          )}
+                          ...
+                        </p>
+                      </div>
+                    </li>
+                  ),
+              )
             ) : (
               <div className="flex w-full justify-center text-primaryColorlt">
                 No messages found

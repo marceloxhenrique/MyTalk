@@ -57,13 +57,17 @@ export const Chat = () => {
     <main className="flex h-screen flex-col">
       <Header />
       <section className="flex h-[calc(100%-57px)] flex-row">
-        <div className="flex h-[calc(100%-7px)] w-full flex-col md:max-w-sm">
+        <div className="flex h-full w-full flex-col md:max-w-sm">
           <Nav setItem={setItem} />
           {item === "newContact" && (
-            <Contact settings={{ setReceiver, setMessages }} />
+            <Contact
+              settings={{ setReceiver, setMessages, messages, receiver }}
+            />
           )}
           {item === "newMessage" && (
-            <Message settings={{ setReceiver, setMessages }} />
+            <Message
+              settings={{ setReceiver, setMessages, messages, receiver }}
+            />
           )}
           {item === "addContact" && <AddContact />}
         </div>
