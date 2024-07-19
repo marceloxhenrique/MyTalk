@@ -50,17 +50,17 @@ export function Contact({
   const [previousReceiver, setPreviousReceiver] = useState<OutPutContact>();
   const [contacts, setContacts] = useState<OutPutContact[]>();
   const [lastMessages, setLastMessages] = useState<MessageProps[]>();
+  const getListOfContacts = async () => {
+    const res = await axios.get(
+      `${BACKEND_URL_BASE}/contacts/${currentUser?.currentUser?.id}`,
+      {
+        withCredentials: true,
+      },
+    );
+    setContacts(res.data);
+  };
   useEffect(() => {
-    const GetListOfContacts = async () => {
-      const res = await axios.get(
-        `${BACKEND_URL_BASE}/contacts/${currentUser?.currentUser?.id}`,
-        {
-          withCredentials: true,
-        },
-      );
-      setContacts(res.data);
-    };
-    GetListOfContacts();
+    getListOfContacts();
     const getListOfLastMessagesReceived = async () => {
       if (currentUser?.currentUser) {
         const lastMessagesReceived = await GetLastMessageSend(
@@ -112,6 +112,16 @@ export function Contact({
     );
     return lastMessageByContactId?.content;
   };
+
+  function filterContacts(contactName: string) {
+    if (contactName.length > 0) {
+      const newContact = contacts?.filter((contact) =>
+        contact.contactName.includes(contactName),
+      );
+      return setContacts(newContact);
+    }
+    getListOfContacts();
+  }
   return (
     <section className="h-[calc(100%-57px)] w-full flex-col md:w-96 md:p-4">
       <fieldset className="flex h-full flex-col md:rounded-md md:border md:border-gray-300">
@@ -120,10 +130,10 @@ export function Contact({
           <Search className="absolute left-2 top-3 h-4 w-4 text-muted-foreground" />
           <input
             type="text"
-            name=""
-            id=""
+            name="filtercontact"
             className="w-full rounded-md p-2 pl-8"
             placeholder="Search"
+            onChange={(e) => filterContacts(e.target.value)}
           />
         </div>
         <ScrollArea className="flex w-full px-3 py-4 md:p-4">

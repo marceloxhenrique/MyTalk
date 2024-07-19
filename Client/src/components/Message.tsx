@@ -31,16 +31,16 @@ const Message = ({
   const currentUser = useContext(AuthContext);
   const [previousReceiver, setPreviousReceiver] = useState<OutPutContact>();
   const [contacts, setContacts] = useState<OutPutContact[]>();
+  const getContactList = async () => {
+    const res = await axios.get(
+      `${BACKEND_URL_BASE}/contacts/${currentUser?.currentUser?.id}`,
+      {
+        withCredentials: true,
+      },
+    );
+    setContacts(res.data);
+  };
   useEffect(() => {
-    const getContactList = async () => {
-      const res = await axios.get(
-        `${BACKEND_URL_BASE}/contacts/${currentUser?.currentUser?.id}`,
-        {
-          withCredentials: true,
-        },
-      );
-      setContacts(res.data);
-    };
     getContactList();
   }, [currentUser?.currentUser?.id]);
 
@@ -78,6 +78,15 @@ const Message = ({
       }
     }
   };
+  function filterContacts(contactName: string) {
+    if (contactName.length > 0) {
+      const newContact = contacts?.filter((contact) =>
+        contact.contactName.includes(contactName),
+      );
+      return setContacts(newContact);
+    }
+    getContactList();
+  }
   return (
     <section className="h-[calc(100%-57px)] w-full flex-col md:w-96 md:p-4">
       <fieldset className="flex h-full flex-col md:rounded-md md:border md:border-gray-300">
@@ -86,10 +95,10 @@ const Message = ({
           <Search className="absolute left-2 top-3 h-4 w-4 text-muted-foreground" />
           <input
             type="text"
-            name=""
-            id=""
+            name="filtercontact"
             className="w-full rounded-md p-2 pl-8"
             placeholder="Search"
+            onChange={(e) => filterContacts(e.target.value)}
           />
         </div>
         <ScrollArea className="flex w-full px-3 py-4 md:p-4">
