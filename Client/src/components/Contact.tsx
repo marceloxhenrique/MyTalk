@@ -24,6 +24,13 @@ type OutPutContact = {
   contactName: string;
   userId: string;
 };
+type ChatProps = {
+  senderId: string | undefined;
+  receiverId: string | undefined;
+  content: string | undefined;
+  id?: string;
+  sentAt?: string;
+};
 
 export function Contact({
   settings,
@@ -35,23 +42,25 @@ export function Contact({
     setMessages: React.Dispatch<
       React.SetStateAction<MessageProps[] | undefined>
     >;
+    messages: ChatProps[] | undefined;
+    receiver: OutPutContact | undefined;
   };
 }) {
   const currentUser = useContext(AuthContext);
   const [previousReceiver, setPreviousReceiver] = useState<OutPutContact>();
   const [contacts, setContacts] = useState<OutPutContact[]>();
   const [lastMessages, setLastMessages] = useState<MessageProps[]>();
+  const getListOfContacts = async () => {
+    const res = await axios.get(
+      `${BACKEND_URL_BASE}/contacts/${currentUser?.currentUser?.id}`,
+      {
+        withCredentials: true,
+      },
+    );
+    setContacts(res.data);
+  };
   useEffect(() => {
-    const GetListOfContacts = async () => {
-      const res = await axios.get(
-        `${BACKEND_URL_BASE}/contacts/${currentUser?.currentUser?.id}`,
-        {
-          withCredentials: true,
-        },
-      );
-      setContacts(res.data);
-    };
-    GetListOfContacts();
+    getListOfContacts();
     const getListOfLastMessagesReceived = async () => {
       if (currentUser?.currentUser) {
         const lastMessagesReceived = await GetLastMessageSend(
@@ -103,6 +112,16 @@ export function Contact({
     );
     return lastMessageByContactId?.content;
   };
+
+  function filterContacts(contactName: string) {
+    if (contactName.length > 0) {
+      const newContact = contacts?.filter((contact) =>
+        contact.contactName.includes(contactName),
+      );
+      return setContacts(newContact);
+    }
+    getListOfContacts();
+  }
   return (
     <section className="h-[calc(100%-57px)] w-full flex-col md:w-96 md:p-4">
       <fieldset className="flex h-full flex-col md:rounded-md md:border md:border-gray-300">
@@ -111,58 +130,77 @@ export function Contact({
           <Search className="absolute left-2 top-3 h-4 w-4 text-muted-foreground" />
           <input
             type="text"
-            name=""
-            id=""
+            name="filtercontact"
             className="w-full rounded-md p-2 pl-8"
             placeholder="Search"
+            onChange={(e) => filterContacts(e.target.value)}
           />
         </div>
         <ScrollArea className="flex w-full px-3 py-4 md:p-4">
           <ul className="md:hidden">
-            {contacts ? (
-              contacts.map((contact: OutPutContact) => (
-                <ChatWindownDrawer key={contact.contactId}>
-                  <li
-                    className="group my-2 flex cursor-pointer flex-row items-center gap-2 rounded-md border border-gray-300 bg-background p-4 text-sm shadow-md hover:bg-primaryColorlt"
-                    onClick={() => handleCreateRoom(contact)}
-                  >
-                    <span className="flex h-12 w-12 items-center justify-center rounded-full border border-gray-300 bg-primaryColorlt text-xl text-primaryColor group-hover:bg-secondaryColor">
-                      {contact.contactName.slice(0, 1).toUpperCase()}
-                    </span>
-                    <div className="flex flex-col justify-center">
-                      <p className="text-lg">{contact.contactName}</p>
-                      <p className="text-gray-500">
-                        {findMessageBycontactId(contact.contactId)}
-                      </p>
-                    </div>
-                  </li>
-                </ChatWindownDrawer>
-              ))
+            {lastMessages ? (
+              contacts?.map(
+                (contact) =>
+                  findMessageBycontactId(contact.contactId) && (
+                    <ChatWindownDrawer
+                      key={contact.contactId}
+                      messages={settings.messages}
+                      receiver={settings.receiver}
+                    >
+                      <li
+                        key={contact.contactId}
+                        className="group my-2 flex cursor-pointer flex-row items-center gap-2 rounded-md border border-gray-300 bg-background p-4 text-sm shadow-md hover:bg-primaryColorlt"
+                        onClick={() => handleCreateRoom(contact)}
+                      >
+                        <span className="flex h-12 w-12 items-center justify-center rounded-full border border-gray-300 bg-primaryColorlt text-xl text-primaryColor group-hover:bg-secondaryColor">
+                          {contact.contactName.slice(0, 1).toUpperCase()}
+                        </span>
+                        <div className="flex flex-col justify-center">
+                          <p className="text-lg">{contact.contactName}</p>
+                          <p className="text-gray-500">
+                            {findMessageBycontactId(contact.contactId)?.slice(
+                              0,
+                              25,
+                            )}
+                            ...
+                          </p>
+                        </div>
+                      </li>
+                    </ChatWindownDrawer>
+                  ),
+              )
             ) : (
               <div className="flex w-full justify-center text-primaryColorlt">
-                No contacts found
+                No messages found
               </div>
             )}
           </ul>
           <ul className="hidden md:block">
-            {contacts && lastMessages && lastMessages.length > 0 ? (
-              contacts.map((contact) => (
-                <li
-                  key={contact.contactId}
-                  className="group my-2 flex cursor-pointer flex-row items-center gap-2 rounded-md border border-gray-300 bg-background p-4 text-sm shadow-md hover:bg-primaryColorlt"
-                  onClick={() => handleCreateRoom(contact)}
-                >
-                  <span className="flex h-12 w-12 items-center justify-center rounded-full border border-gray-300 bg-primaryColorlt text-xl text-primaryColor group-hover:bg-secondaryColor">
-                    {contact.contactName.slice(0, 1).toUpperCase()}
-                  </span>
-                  <div className="flex flex-col justify-center">
-                    <p className="text-lg">{contact.contactName}</p>
-                    <p className="text-gray-500">
-                      {findMessageBycontactId(contact.contactId)}
-                    </p>
-                  </div>
-                </li>
-              ))
+            {lastMessages ? (
+              contacts?.map(
+                (contact) =>
+                  findMessageBycontactId(contact.contactId) && (
+                    <li
+                      key={contact.contactId}
+                      className="group my-2 flex cursor-pointer flex-row items-center gap-2 rounded-md border border-gray-300 bg-background p-4 text-sm shadow-md hover:bg-primaryColorlt"
+                      onClick={() => handleCreateRoom(contact)}
+                    >
+                      <span className="flex h-12 w-12 items-center justify-center rounded-full border border-gray-300 bg-primaryColorlt text-xl text-primaryColor group-hover:bg-secondaryColor">
+                        {contact.contactName.slice(0, 1).toUpperCase()}
+                      </span>
+                      <div className="flex flex-col justify-center">
+                        <p className="text-lg">{contact.contactName}</p>
+                        <p className="text-gray-500">
+                          {findMessageBycontactId(contact.contactId)?.slice(
+                            0,
+                            25,
+                          )}
+                          ...
+                        </p>
+                      </div>
+                    </li>
+                  ),
+              )
             ) : (
               <div className="flex w-full justify-center text-primaryColorlt">
                 No messages found
