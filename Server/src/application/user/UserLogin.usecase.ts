@@ -13,7 +13,7 @@ export default class UserLogin {
       throw new Error("Unable to log in : Invalid email or password");
     }
 
-    const isPasswordValid = bcrypt.compare(password, result?.getPassword()!);
+    const isPasswordValid = await bcrypt.compare(password, result?.getPassword()!);
     if (!isPasswordValid) {
       throw new Error("Unable to log in: Invalid email or password");
     }

@@ -8,6 +8,7 @@ type User = {
 };
 
 type AuthContextType = {
+  setCurrentUser: React.Dispatch<React.SetStateAction<User | undefined>>;
   currentUser: User | undefined;
   login: (user: User) => void;
   logOut: () => void;
@@ -36,7 +37,6 @@ export default function AuthContextProvider({
           email: data.email,
           userName: data.userName,
         });
-        console.log(data);
       } catch (error) {
         console.error(error);
       }
@@ -49,10 +49,12 @@ export default function AuthContextProvider({
   };
 
   const login = (user: User): void => {
-    setCurrentUser({ id: user.id, email: user.email });
+    setCurrentUser({ id: user.id, email: user.email, userName: user.userName });
   };
   return (
-    <AuthContext.Provider value={{ currentUser, login, logOut }}>
+    <AuthContext.Provider
+      value={{ currentUser, setCurrentUser, login, logOut }}
+    >
       {children}
     </AuthContext.Provider>
   );
