@@ -6,6 +6,7 @@ import { HttpServer } from "../../adapters/HttpServer";
 import TokenService from "../../domain/services/TokenService";
 import AuthenticateUser from "./AuthenticateUser";
 import UserLogout from "./UserLogout";
+import { UpdateUser } from "./UpdateUser.usecase";
 
 export default class UserController {
   constructor(
@@ -110,6 +111,22 @@ export default class UserController {
       } catch (error) {
         console.error(error);
         res.status(401).json({ message: "Token Unauthorized" });
+      }
+    });
+
+    httpServer.on("post", "/api/updateuser/:id", async (req, res) => {
+      try {
+        tokenService.verifyToken(req.cookies.MyTalk_Token);
+        const newUserName = req.body.userName.newUserName;
+        const userId = req.params.id;
+        const updateUser = new UpdateUser(userDatabaseRepository);
+        updateUser.execute(newUserName, userId);
+        res.sendStatus(200);
+      } catch (error: any) {
+        if (error.message === "Token verification failed") {
+          return res.status(401).json({ message: "Unauthorized" });
+        }
+        res.status(404).json({ message: "User not found" });
       }
     });
 

@@ -11,6 +11,7 @@ export interface HttpResponse {
   status(statusCode: number): this;
   json(data: any): this;
   send(data: any): this;
+  sendStatus(data: any): this;
   cookie(name: string, val: string, options: Object): this;
   sendFile(data: any): this;
   clearCookie(token: string, options: Object): this;

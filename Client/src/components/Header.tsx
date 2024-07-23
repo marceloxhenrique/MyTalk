@@ -1,7 +1,7 @@
-import { LogOut, Settings, User } from "lucide-react";
+import axios from "axios";
+import { LogOut } from "lucide-react";
 import { AuthContext } from "@/contexts/AuthContext";
 import { useContext } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import {
   DropdownMenu,
@@ -12,6 +12,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Profile } from "./Profile";
+
 const BACKEND_URL_BASE = import.meta.env.VITE_BACKEND_URL_BASE;
 
 export const Header = () => {
@@ -41,17 +43,10 @@ export const Header = () => {
           <DropdownMenuLabel>{user?.currentUser?.email}</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <DropdownMenuItem className="hover:bg-primaryColor">
-              <User className="mr-2 h-4 w-4" />
-              <span>Profile</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Settings className="mr-2 h-4 w-4" />
-              <span>Settings</span>
-            </DropdownMenuItem>
+            <Profile />
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={handleLogout}>
+          <DropdownMenuItem onClick={handleLogout} className="font-normal">
             <LogOut className="mr-2 h-4 w-4" />
             <span>Log out</span>
           </DropdownMenuItem>

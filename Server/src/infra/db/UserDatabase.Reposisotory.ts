@@ -4,6 +4,13 @@ import { UserRepositoryInterface } from "../../domain/user/User.repository";
 
 export default class UserDatabaseRepository implements UserRepositoryInterface {
   constructor(private connection: Connection) {}
+  async updateUserName(userName: string, userId: string): Promise<void> {
+    const res = await this.connection.query(`UPDATE public.user SET user_name = $1 WHERE id = $2`, [
+      userName,
+      userId,
+    ]);
+    return res;
+  }
 
   async create(user: User): Promise<void> {
     await this.connection.query(

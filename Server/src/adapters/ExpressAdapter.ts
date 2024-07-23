@@ -42,6 +42,10 @@ export default class ExpressAdapter implements HttpServer {
           res.send(data);
           return httpResponse;
         },
+        sendStatus: function (data): HttpResponse {
+          res.sendStatus(data);
+          return httpResponse;
+        },
         cookie: function (name: string, val: string, options: CookieOptions): HttpResponse {
           res.cookie(name, val, options);
           return httpResponse;
