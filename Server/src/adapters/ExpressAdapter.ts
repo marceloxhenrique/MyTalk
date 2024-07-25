@@ -15,7 +15,10 @@ export default class ExpressAdapter implements HttpServer {
     this.app.use(cookieParser());
     this.app.use(
       cors({
-        origin: FRONT_END_URL ?? "http://localhost:5173",
+        origin:
+          process.env.NODE_ENV == "dev"
+            ? [`${process.env.FRONT_END_URL}`]
+            : [`${process.env.FRONT_END_URL_PROD}`],
         optionsSuccessStatus: 200,
         credentials: true,
       })
