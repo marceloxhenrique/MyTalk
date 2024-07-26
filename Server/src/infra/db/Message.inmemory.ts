@@ -2,6 +2,9 @@ import Message from "../../domain/message/Message.entity";
 import { MessageInterface } from "../../domain/message/Message.repository";
 
 export default class MessageInMemory implements MessageInterface {
+  getLastMessage(senderId: string): Promise<Message[] | null> {
+    throw new Error("Method not implemented.");
+  }
   async saveMessage(message: Message): Promise<void> {
     this.message.push(message);
   }

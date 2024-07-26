@@ -2,6 +2,9 @@ import User from "../../domain/user/User.entity";
 import { UserRepositoryInterface } from "../../domain/user/User.repository";
 
 export default class UserInMemory implements UserRepositoryInterface {
+  updateUserName(userName: string, userId: string): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
   users: User[] = [];
 
   async create(user: User): Promise<void> {

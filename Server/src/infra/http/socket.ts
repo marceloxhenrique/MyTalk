@@ -8,7 +8,10 @@ export class WebsocketConnection {
   execute() {
     const io = new SocketIOServer(this.server, {
       cors: {
-        origin: process.env.NODE_ENV == "dev" ? [`${process.env.FRONT_END_URL}`] : false,
+        origin:
+          process.env.NODE_ENV == "dev"
+            ? [`${process.env.FRONT_END_URL}`]
+            : [`${process.env.FRONT_END_URL_PROD}`],
         allowedHeaders: "Content-Type",
       },
     });

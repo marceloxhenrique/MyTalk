@@ -1,7 +1,11 @@
 import Contact from "../../domain/contact/Contact.entity";
 import { ContactRepositoryInterface } from "../../domain/contact/Contact.repository";
+import User from "../../domain/user/User.entity";
 
 export default class ContactInMeory implements ContactRepositoryInterface {
+  findUserByEmail(userEmail: string): Promise<User | null> {
+    throw new Error("Method not implemented.");
+  }
   contacts: Contact[] = [];
   async addContact(contact: Contact): Promise<void> {
     this.contacts.push(contact);
