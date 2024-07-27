@@ -12,7 +12,9 @@ export class WebsocketConnection {
           process.env.NODE_ENV == "dev"
             ? [`${process.env.FRONT_END_URL}`]
             : [`${process.env.FRONT_END_URL_PROD}`],
-        allowedHeaders: "Content-Type",
+        methods: ["GET", "POST"],
+        allowedHeaders: ["Content-Type", "Authorization"],
+        credentials: true,
       },
     });
     io.on("connection", (socket) => {
