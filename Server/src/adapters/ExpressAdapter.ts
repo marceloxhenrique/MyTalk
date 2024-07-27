@@ -20,6 +20,8 @@ export default class ExpressAdapter implements HttpServer {
             ? [`${process.env.FRONT_END_URL}`]
             : [`${process.env.FRONT_END_URL_PROD}`],
         optionsSuccessStatus: 200,
+        methods: ["GET", "POST", "PUT", "DELETE"],
+        allowedHeaders: ["Content-Type", "Authorization"],
         credentials: true,
       })
     );
