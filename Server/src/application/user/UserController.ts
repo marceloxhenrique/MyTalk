@@ -35,13 +35,13 @@ export default class UserController {
               httpOnly: true,
               secure: true,
               credentials: true,
-              sameSite: "strict",
+              sameSite: "None",
             })
             .cookie("Mytalk_Refresh_Token", output.refreshToken, {
               httpOnly: true,
               secure: true,
               credentials: true,
-              sameSite: "strict",
+              sameSite: "None",
             })
             .json(output.user);
         } else {
@@ -98,13 +98,13 @@ export default class UserController {
             httpOnly: true,
             secure: true,
             credentials: true,
-            sameSite: "strict",
+            sameSite: "None",
           })
           .clearCookie("Mytalk_Refresh_Token", {
             httpOnly: true,
             secure: true,
             credentials: true,
-            sameSite: "strict",
+            sameSite: "None",
           })
           .status(200)
           .json({ message: "Logged out" });
