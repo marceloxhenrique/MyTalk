@@ -60,7 +60,7 @@ export default class ExpressAdapter implements HttpServer {
           return httpResponse;
         },
         clearCookie: function (token: string, options: CookieOptions): HttpResponse {
-          res.clearCookie(token);
+          res.clearCookie(token, options);
           return httpResponse;
         },
       };

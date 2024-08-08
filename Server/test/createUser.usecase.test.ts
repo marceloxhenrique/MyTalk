@@ -1,12 +1,11 @@
 import { FindUser } from "./../src/application/user/FindUser.usecase";
 import { CreateUser } from "../src/application/user/CreateUser.usecase";
-// import { FindUser } from "../src/application/user/FindUser.usecase";
 import UserLogin from "../src/application/user/UserLogin.usecase";
 import UserInMemory from "../src/infra/db/user.inmemory";
 import { JwtConfig } from "../src/infra/config/JwtConfig";
 import JwtTokenService from "../src/infra/services/JwtTokenService";
 describe("Create User ", () => {
-  it("Shoudl create a user", async () => {
+  it("Should create a user", async () => {
     const user = {
       email: "jhon@test.gmail.com",
       password: "123456",

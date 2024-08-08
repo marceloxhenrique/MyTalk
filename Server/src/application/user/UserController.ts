@@ -34,13 +34,11 @@ export default class UserController {
             .cookie("MyTalk_Token", output.token, {
               httpOnly: true,
               secure: true,
-              credentials: true,
               sameSite: "None",
             })
             .cookie("Mytalk_Refresh_Token", output.refreshToken, {
               httpOnly: true,
               secure: true,
-              credentials: true,
               sameSite: "None",
             })
             .json(output.user);
@@ -97,13 +95,11 @@ export default class UserController {
           .clearCookie("MyTalk_Token", {
             httpOnly: true,
             secure: true,
-            credentials: true,
             sameSite: "None",
           })
           .clearCookie("Mytalk_Refresh_Token", {
             httpOnly: true,
             secure: true,
-            credentials: true,
             sameSite: "None",
           })
           .status(200)
