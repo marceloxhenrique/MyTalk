@@ -25,18 +25,15 @@ export default class UserDatabaseRepository implements UserRepositoryInterface {
       return null;
     }
     const row = res[0];
-
     return new User(row.email, row.password, row.user_name, row.id);
   }
 
   async findByEmail(email: string): Promise<User | null> {
     const res = await this.connection.query(`SELECT * FROM public.user WHERE email = $1`, [email]);
-
     if (res.length === 0) {
       return null;
     }
     const row = res[0];
-
     return new User(row.email, row.password, row.user_name, row.id);
   }
 }
