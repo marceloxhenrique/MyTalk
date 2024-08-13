@@ -9,6 +9,10 @@ export default class UserDatabaseRepository implements UserRepositoryInterface {
       userName,
       userId,
     ]);
+    await this.connection.query(
+      `UPDATE public.contact SET contact_name = $1 WHERE contact_id = $2`,
+      [userName, userId]
+    );
     return res;
   }
 

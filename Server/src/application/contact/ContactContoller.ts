@@ -5,6 +5,7 @@ import AddContact from "./AddContact.usecase";
 import AddFriendRequest from "./AddFriendRequest.usecase";
 import GetAllContacts from "./GetAllContacts.usecase";
 import GetFriendRequest from "./GetFriendRequest";
+import IgnoreFriendRequest from "./IgnoreFriendRequest.usecase";
 
 export default class ContactController {
   constructor(
@@ -16,7 +17,7 @@ export default class ContactController {
       try {
         const addContact = new AddContact(contactRepository, tokenService);
         await addContact.execute(req.body, req.cookies.MyTalk_Token);
-        res.status(201).json("Contact created");
+        res.status(201).json("New contact added successfully.");
       } catch (error) {
         console.error(error);
         res.status(401).json({ message: "Contact email Invalid or contact already exist" });
@@ -43,6 +44,16 @@ export default class ContactController {
       } catch (error) {
         console.error(error);
         res.status(401).json({ message: "Contact email Invalid or contact already exist" });
+      }
+    });
+    httpServer.on("post", "/api/friendrequest/ignore", async (req, res) => {
+      try {
+        const ignoreFriendRequest = new IgnoreFriendRequest(contactRepository, tokenService);
+        await ignoreFriendRequest.execute(req.body, req.cookies.MyTalk_Token);
+        res.status(201).json("Friend request ignored");
+      } catch (error) {
+        console.error(error);
+        res.status(401).json({ message: "Friend request could not be ignored" });
       }
     });
     httpServer.on("get", "/api/friendrequest/:userId", async (req, res) => {
