@@ -3,6 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useState } from "react";
 
 const schemaSignUp = z.object({
   email: z
@@ -20,7 +21,8 @@ export default function Signup(props: {
   setToggleForm: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   type SignupFormProps = z.infer<typeof schemaSignUp>;
-
+  const [displayMessageAccountCreated, setDisplayMessageAccountCreated] =
+    useState<boolean>(false);
   const {
     register,
     handleSubmit,
@@ -35,8 +37,7 @@ export default function Signup(props: {
       await axios.post(`${BACKEND_URL_BASE}/register`, userInfo, {
         withCredentials: true,
       });
-      props.setToggleForm(!props.toggleForm);
-      toast.success("Account successfully created!");
+      setDisplayMessageAccountCreated(true);
       reset();
     } catch (error) {
       if (error instanceof Error) {
@@ -46,7 +47,22 @@ export default function Signup(props: {
     }
   }
 
-  return (
+  return displayMessageAccountCreated ? (
+    <section className="flex w-full max-w-lg flex-col px-4 py-10 md:px-8 lg:rounded-md lg:border lg:border-primaryColor lg:bg-primaryColorlt">
+      <h2 className="md:5xl mb-12 text-2xl font-medium text-primaryColor">
+        Account successfully created!
+      </h2>
+
+      <a
+        onClick={() => {
+          props.setToggleForm(!props.toggleForm);
+        }}
+        className="cursor-pointer font-bold underline"
+      >
+        <p>Return to login</p>
+      </a>
+    </section>
+  ) : (
     <form
       onSubmit={handleSubmit((userInfo) => {
         handleSignupForm(userInfo);
