@@ -2,7 +2,10 @@ import { HttpServer } from "../../adapters/HttpServer";
 import { ContactRepositoryInterface } from "../../domain/contact/Contact.repository";
 import TokenService from "../../domain/services/TokenService";
 import AddContact from "./AddContact.usecase";
+import AddFriendRequest from "./AddFriendRequest.usecase";
 import GetAllContacts from "./GetAllContacts.usecase";
+import GetFriendRequest from "./GetFriendRequest";
+import IgnoreFriendRequest from "./IgnoreFriendRequest.usecase";
 
 export default class ContactController {
   constructor(
@@ -14,13 +17,12 @@ export default class ContactController {
       try {
         const addContact = new AddContact(contactRepository, tokenService);
         await addContact.execute(req.body, req.cookies.MyTalk_Token);
-        res.status(201).json("Contact created");
+        res.status(201).json("New contact added successfully.");
       } catch (error) {
         console.error(error);
         res.status(401).json({ message: "Contact email Invalid or contact already exist" });
       }
     });
-
     httpServer.on("get", "/api/contacts/:userId", async (req, res) => {
       try {
         const getAllContacts = new GetAllContacts(contactRepository, tokenService);
@@ -29,6 +31,39 @@ export default class ContactController {
           req.cookies.MyTalk_Token
         );
         res.status(201).json(contactList);
+      } catch (error) {
+        console.error(error);
+        res.status(404).json({ message: "Contact list is empty" });
+      }
+    });
+    httpServer.on("post", "/api/friendrequest", async (req, res) => {
+      try {
+        const friendRequest = new AddFriendRequest(contactRepository, tokenService);
+        await friendRequest.execute(req.body, req.cookies.MyTalk_Token);
+        res.status(201).json("Friend request successfully sent");
+      } catch (error) {
+        console.error(error);
+        res.status(401).json({ message: "Contact email Invalid or contact already exist" });
+      }
+    });
+    httpServer.on("post", "/api/friendrequest/ignore", async (req, res) => {
+      try {
+        const ignoreFriendRequest = new IgnoreFriendRequest(contactRepository, tokenService);
+        await ignoreFriendRequest.execute(req.body, req.cookies.MyTalk_Token);
+        res.status(201).json("Friend request ignored");
+      } catch (error) {
+        console.error(error);
+        res.status(401).json({ message: "Friend request could not be ignored" });
+      }
+    });
+    httpServer.on("get", "/api/friendrequest/:userId", async (req, res) => {
+      try {
+        const getFriendRequest = new GetFriendRequest(contactRepository, tokenService);
+        const friendRequest = await getFriendRequest.execute(
+          req.params.userId,
+          req.cookies.MyTalk_Token
+        );
+        res.status(201).json(friendRequest);
       } catch (error) {
         console.error(error);
         res.status(404).json({ message: "Contact list is empty" });

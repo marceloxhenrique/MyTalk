@@ -82,7 +82,7 @@ const ChatWindownDrawer = ({
             {receiver && (
               <div className="flex flex-row gap-3 rounded-sm p-2">
                 <span className="flex h-12 w-12 items-center justify-center rounded-full border border-gray-300 bg-primaryColorlt text-xl text-primaryColor group-hover:bg-secondaryColor">
-                  {receiver?.contactName.slice(0, 1).toUpperCase()}
+                  {receiver?.email.slice(0, 1).toUpperCase()}
                 </span>
                 <div>
                   <p>{receiver?.contactName}</p>

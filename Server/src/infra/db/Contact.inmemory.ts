@@ -3,6 +3,22 @@ import { ContactRepositoryInterface } from "../../domain/contact/Contact.reposit
 import User from "../../domain/user/User.entity";
 
 export default class ContactInMeory implements ContactRepositoryInterface {
+  addFriendRequest(contact: {
+    email: string;
+    userId: string;
+    userEmail: string;
+    id?: string;
+  }): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
+  getFriendRequest(
+    userEmail: string
+  ): Promise<{ email: string; userId: string; userEmail: string; id?: string }[] | null> {
+    throw new Error("Method not implemented.");
+  }
+  deleteFriendRequest(userEmail: string, contactEmail: string): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
   findUserByEmail(userEmail: string): Promise<User | null> {
     throw new Error("Method not implemented.");
   }

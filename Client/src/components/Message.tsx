@@ -80,8 +80,10 @@ const Message = ({
   };
   function filterContacts(contactName: string) {
     if (contactName.length > 0) {
-      const newContact = contacts?.filter((contact) =>
-        contact.contactName.includes(contactName),
+      const newContact = contacts?.filter(
+        (contact) =>
+          contact.email.includes(contactName) ||
+          contact.contactName.includes(contactName),
       );
       return setContacts(newContact);
     }
@@ -115,7 +117,7 @@ const Message = ({
                     onClick={() => handleCreateRoom(contact)}
                   >
                     <span className="flex h-12 w-12 items-center justify-center rounded-full border border-gray-300 bg-primaryColorlt text-xl text-primaryColor group-hover:bg-secondaryColor">
-                      {contact.contactName.slice(0, 1).toUpperCase()}
+                      {contact.email.slice(0, 1).toUpperCase()}
                     </span>
                     <div className="flex flex-col justify-center">
                       <p className="text-lg">{contact.contactName}</p>
@@ -139,7 +141,7 @@ const Message = ({
                   onClick={() => handleCreateRoom(contact)}
                 >
                   <span className="flex h-12 w-12 items-center justify-center rounded-full border border-gray-300 bg-primaryColorlt text-xl text-primaryColor group-hover:bg-secondaryColor">
-                    {contact.contactName.slice(0, 1).toUpperCase()}
+                    {contact.email.slice(0, 1).toUpperCase()}
                   </span>
                   <div className="flex flex-col justify-center">
                     <p className="text-lg">{contact.contactName}</p>

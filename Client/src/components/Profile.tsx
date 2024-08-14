@@ -69,7 +69,7 @@ export function Profile() {
           <span>Profile</span>
         </button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-full">
+      <DialogContent className="rounded-sm sm:max-w-[80em]">
         <DialogHeader>
           <DialogTitle>Edit profile</DialogTitle>
           <DialogDescription>

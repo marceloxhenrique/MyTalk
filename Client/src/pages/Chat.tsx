@@ -7,6 +7,7 @@ import { AuthContext } from "@/contexts/AuthContext";
 import { socket } from "@/Socket";
 import Message from "@/components/Message";
 import ChatWindow from "@/components/ChatWindow";
+import ContactList from "@/components/ContactList";
 
 enum ListChoice {
   newContact = "newContact",
@@ -20,6 +21,14 @@ type MessageProps = {
   content: string | undefined;
   id?: string;
   sentAt?: string;
+};
+
+type OutPutContact = {
+  id: string;
+  contactId: string;
+  email: string;
+  contactName: string;
+  userId: string;
 };
 
 export const Chat = () => {
@@ -71,15 +80,15 @@ export const Chat = () => {
           )}
           {item === "addContact" && <AddContact />}
         </div>
-        <ChatWindow messages={messages} receiver={receiver} />
+
+        {receiver === undefined ? (
+          <ContactList
+            settings={{ setReceiver, setMessages, messages, receiver }}
+          />
+        ) : (
+          <ChatWindow messages={messages} receiver={receiver} />
+        )}
       </section>
     </main>
   );
-};
-type OutPutContact = {
-  id: string;
-  contactId: string;
-  email: string;
-  contactName: string;
-  userId: string;
 };

@@ -2,8 +2,8 @@ export default class Contact {
   constructor(
     private contactId: string,
     private email: string,
-    private contactName: string,
     private userId: string,
+    private contactName?: string,
     private id?: string
   ) {
     if (!this.isValidEmail(email)) {

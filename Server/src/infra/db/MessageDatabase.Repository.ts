@@ -37,7 +37,6 @@ export default class MessageDatabaseRespository implements MessageInterface {
   }
 
   async getLastMessage(senderId: string): Promise<Message[] | null> {
-    console.log("ID", senderId);
     const res = await this.connection.query(
       `SELECT * FROM public.message WHERE contact_id = $1 
         ORDER BY sent_at DESC;`,
