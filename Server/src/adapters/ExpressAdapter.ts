@@ -74,7 +74,7 @@ export default class ExpressAdapter implements HttpServer {
 
   listen(port: number) {
     this.server.listen(port, () => {
-      console.log(`Server running in port: http://localhost:${port}`);
+      console.log(`Server running in port: http://localhost:${port}/api`);
     });
   }
 }
