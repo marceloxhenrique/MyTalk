@@ -7,17 +7,24 @@ import TokenService from "../../domain/services/TokenService";
 import AuthenticateUser from "./AuthenticateUser";
 import UserLogout from "./UserLogout";
 import { UpdateUser } from "./UpdateUser.usecase";
+import { ContactRepositoryInterface } from "../../domain/contact/Contact.repository";
+import AddDefaultContact from "../contact/AddDefaultContact";
 
 export default class UserController {
   constructor(
     readonly userDatabaseRepository: UserRepositoryInterface,
     readonly httpServer: HttpServer,
-    private tokenService: TokenService
+    private tokenService: TokenService,
+    private contactDatabaseRespository: ContactRepositoryInterface
   ) {
     httpServer.on("post", "/api/register", async (req, res) => {
       try {
         const createUser = new CreateUser(userDatabaseRepository);
         const newUser = await createUser.execute(req.body);
+        const addDefaultContact = new AddDefaultContact(contactDatabaseRespository);
+        if (newUser) {
+          addDefaultContact.execute(newUser.email, newUser.id!);
+        }
         res.status(201).json(newUser);
       } catch (error) {
         console.error(error);

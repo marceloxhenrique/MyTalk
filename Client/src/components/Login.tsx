@@ -4,8 +4,9 @@ import z from "zod";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
+import { Loader2 } from "lucide-react";
 
 const BACKEND_URL_BASE = import.meta.env.VITE_BACKEND_URL_BASE;
 
@@ -35,14 +36,16 @@ export default function Login(props: {
     resolver: zodResolver(schemaLogin),
   });
   const authContext = useContext(AuthContext);
-
+  const [isLoading, setIsLoading] = useState(false);
   async function handleLoginForm(userInfo: LoginFormProps) {
+    setIsLoading(true);
     try {
       const result = await axios.post(`${BACKEND_URL_BASE}/login`, userInfo, {
         withCredentials: true,
       });
       if (authContext) {
         authContext.login(result.data);
+        setIsLoading(false);
       }
       reset();
       navigate("/chat");
@@ -51,6 +54,7 @@ export default function Login(props: {
         toast.error("Email or password invalid!");
         console.error(error);
       }
+      setIsLoading(false);
     }
   }
 
@@ -70,6 +74,7 @@ export default function Login(props: {
         type="text"
         className="input"
         placeholder="Enter your email adress"
+        disabled={isLoading}
       />
       <span className="mb-1 h-7 text-sm text-red-500">
         {errors.email?.message && <p>{errors.email.message}</p>}
@@ -83,18 +88,21 @@ export default function Login(props: {
         name="password"
         className="input"
         placeholder="Enter your password"
+        disabled={isLoading}
       />
-
       <section className="mb-1 h-7 text-sm text-red-500">
         {errors.password?.message && <p>{errors.password.message}</p>}
       </section>
       <button
         type="submit"
-        className="my-2 rounded-md bg-primaryColor py-3 text-lg font-semibold text-secondaryTextColor"
+        className={`my-2 flex items-center justify-center gap-2 rounded-md bg-primaryColor py-3 text-lg font-semibold text-secondaryTextColor ${isLoading ? "bg-blue-500" : "bg-primaryColor"}`}
+        disabled={isLoading}
       >
+        {isLoading && <Loader2 className="h-6 w-6 animate-spin" />}
         Log in
       </button>
-      <p className="mt-5 text-center text-primaryTextColor">
+
+      <p className="pri mt-5 text-center text-primaryTextColor">
         Need an account?{" "}
         <a
           onClick={() => {

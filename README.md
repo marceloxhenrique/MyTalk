@@ -17,7 +17,13 @@
 
 Mytalk is a lightweight chat web application designed to provide a clear and intuitive communication experience. Get in touch with friends, family, or colleagues in a convenient and user-friendly way.
 
-# Install and run the App
+## Prerequisites
+
+- [NodeJS](https://nodejs.org/)
+- [PostgreSQL](https://www.postgresql.org/)
+- [Git](https://git-scm.com/)
+
+# Install and run the App locally
 
 The App is divided in two main folders `Server` and `Client`. Each folder contains its own dependencies.
 
@@ -36,7 +42,7 @@ cd Client
 npm install
 ```
 
-## Setup .env file for Client Environment:
+## Setup .env file for Client Environment
 
 Create a .env file in the Client folder with the following content:
 
@@ -46,7 +52,7 @@ VITE_BACKEND_URL_SOCKET = "http://localhost:3000";
 VITE_NODE_ENV = "dev";
 ```
 
-## Install Server Packages:
+## Install Server Packages
 
 Navigate to the Server folder and install the necessary packages:
 
@@ -55,7 +61,7 @@ cd ../Server
 npm install
 ```
 
-## Setup .env file for Server Environment:
+## Setup .env file for Server Environment
 
 Create a .env file in the Server folder with the following content:
 
@@ -114,3 +120,17 @@ npm run dev
 The client application will be available at `http://localhost:5173`.
 
 The server will be running on `http://localhost:3000/api` (or the port specified in your .env file).
+
+## Contribute
+
+If you want to contribute, clone this repo, create your work branch and get your hands dirty!
+
+```shell
+git clone git@github.com:marceloxhenrique/MyTalk.git
+```
+
+```shell
+git checkout -b feature/NAME
+```
+
+At the end, open a Pull Request explaining the problem solved or feature made, if exists, append screenshot of visual modifications and wait for the review!

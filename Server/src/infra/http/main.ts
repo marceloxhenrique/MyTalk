@@ -24,4 +24,4 @@ websocketConnection.execute();
 
 new MessageController(httpServer, messageDatabaseRepository, jwtTokenService);
 new ContactController(contactDatabaseRepository, httpServer, jwtTokenService);
-new UserController(userDatabaseRepository, httpServer, jwtTokenService);
+new UserController(userDatabaseRepository, httpServer, jwtTokenService, contactDatabaseRepository);
