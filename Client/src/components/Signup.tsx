@@ -4,6 +4,7 @@ import z from "zod";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useState } from "react";
+import { Loader2 } from "lucide-react";
 
 const schemaSignUp = z.object({
   email: z
@@ -31,19 +32,22 @@ export default function Signup(props: {
   } = useForm<SignupFormProps>({
     resolver: zodResolver(schemaSignUp),
   });
-
+  const [isLoading, setIsLoading] = useState(false);
   async function handleSignupForm(userInfo: SignupFormProps) {
+    setIsLoading(true);
     try {
       await axios.post(`${BACKEND_URL_BASE}/register`, userInfo, {
         withCredentials: true,
       });
       setDisplayMessageAccountCreated(true);
       reset();
+      setIsLoading(false);
     } catch (error) {
       if (error instanceof Error) {
         toast.error("Email or password invalid!");
         console.error(error);
       }
+      setIsLoading(false);
     }
   }
 
@@ -81,6 +85,7 @@ export default function Signup(props: {
         name="email"
         className="input"
         placeholder="Enter your email adress"
+        disabled={isLoading}
       />
       <span className="mb-1 h-7 text-sm text-red-500">
         {errors.email?.message && <p>{errors.email.message}</p>}
@@ -94,14 +99,17 @@ export default function Signup(props: {
         name="password"
         className="input"
         placeholder="Enter your password"
+        disabled={isLoading}
       />
       <span className="mb-1 h-7 text-sm text-red-500">
         {errors.password?.message && <p>{errors.password.message}</p>}
       </span>
       <button
         type="submit"
-        className="my-2 rounded-md bg-primaryColor py-3 text-lg font-semibold text-secondaryTextColor"
+        className={`my-2 flex items-center justify-center gap-2 rounded-md bg-primaryColor py-3 text-lg font-semibold text-secondaryTextColor ${isLoading ? "bg-blue-500" : "bg-primaryColor"}`}
+        disabled={isLoading}
       >
+        {isLoading && <Loader2 className="h-6 w-6 animate-spin" />}
         Sign up
       </button>
       <p className="mt-5 text-center text-primaryTextColor">
