@@ -10,7 +10,7 @@ import ChatWindow from "@/components/ChatWindow";
 import ContactList from "@/components/ContactList";
 
 enum ListChoice {
-  newContact = "newContact",
+  chats = "chats",
   newMessage = "newMessage",
   addContact = "addContact",
 }
@@ -35,7 +35,7 @@ export const Chat = () => {
   const user = useContext(AuthContext);
   const [receiver, setReceiver] = useState<OutPutContact>();
   const [messages, setMessages] = useState<MessageProps[] | undefined>([]);
-  const [item, setItem] = useState<keyof typeof ListChoice>("newContact");
+  const [item, setItem] = useState<keyof typeof ListChoice>("chats");
 
   useEffect(() => {
     if (user?.currentUser) {
@@ -54,7 +54,6 @@ export const Chat = () => {
       socket.disconnect();
     };
   }, [user]);
-
   socket.on(
     "private_message",
     (msg: { senderId: string; receiverId: string; content: string }) => {
@@ -68,7 +67,7 @@ export const Chat = () => {
       <section className="flex h-[calc(100%-57px)] flex-row">
         <div className="flex h-full w-full flex-col md:max-w-sm">
           <Nav setItem={setItem} />
-          {item === "newContact" && (
+          {item === "chats" && (
             <Contact
               settings={{ setReceiver, setMessages, messages, receiver }}
             />

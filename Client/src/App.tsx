@@ -37,7 +37,7 @@ function App() {
             </RequireAuth>
           }
         />
-        <Route path="/*" element={<NotFound />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <Toaster position="top-center" />
     </>
