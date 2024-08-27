@@ -140,7 +140,7 @@ export function Contact({
         </div>
         <ScrollArea className="flex w-full px-3 py-4 md:p-4">
           <ul className="md:hidden">
-            {lastMessages ? (
+            {lastMessages?.length ? (
               contacts?.map(
                 (contact) =>
                   findMessageBycontactId(contact.contactId) && (
@@ -182,7 +182,7 @@ export function Contact({
             )}
           </ul>
           <ul className="hidden md:block">
-            {lastMessages ? (
+            {lastMessages?.length ? (
               contacts?.map(
                 (contact) =>
                   findMessageBycontactId(contact.contactId) && (

@@ -10,7 +10,7 @@ export const Nav = ({
   setItem,
 }: {
   setItem: React.Dispatch<
-    React.SetStateAction<"newContact" | "newMessage" | "addContact">
+    React.SetStateAction<"chats" | "newMessage" | "addContact">
   >;
 }) => {
   return (
@@ -18,7 +18,7 @@ export const Nav = ({
       <nav className="m-3.5 flex justify-center gap-8 text-primaryColor">
         <TooltipProvider>
           <li
-            onClick={() => setItem("newContact")}
+            onClick={() => setItem("chats")}
             className="flex h-9 w-9 items-center justify-center rounded-md p-1 hover:bg-primaryColorlt"
           >
             <Tooltip delayDuration={0}>
