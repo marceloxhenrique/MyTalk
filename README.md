@@ -13,7 +13,7 @@
   </tr>
 </table>
 
-# [MyTalk](my-talk-nine.vercel.app)
+# [MyTalk](mytalk.dev)
 
 Mytalk is a lightweight chat web application designed to provide a clear and intuitive communication experience. Get in touch with friends, family, or colleagues in a convenient and user-friendly way.
 
