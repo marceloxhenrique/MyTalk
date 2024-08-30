@@ -111,7 +111,7 @@ Navigate to the Client folder and run:
 npm run dev
 ```
 
-Open a new terminal window, navigate to the Client folder, and run:
+Open a new terminal window, navigate to the Server folder, and run:
 
 ```shell
 npm run dev
