@@ -1,3 +1,4 @@
+import { promises } from "dns";
 import User from "./User.entity";
 
 export interface UserRepositoryInterface {
@@ -5,4 +6,5 @@ export interface UserRepositoryInterface {
   findById(userId: string): Promise<User | null>;
   findByEmail(email: string): Promise<User | null>;
   updateUserName(userName: string, userId: string): Promise<void>;
+  deleteAccount(userId: string): Promise<void>;
 }
