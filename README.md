@@ -88,7 +88,9 @@ DB_CONNECTION='postgresql://johndoe:randompassword@localhost:5432/mydb?schema=pu
 ## Setup the database
 
 Run the database migration script to set up the database schema:
-Note: The database cannot be accessed by other users while the migration is running.
+
+
+(Note: The database cannot be accessed by other users while the migration is running.)
 
 ```shell
 npm run migration
