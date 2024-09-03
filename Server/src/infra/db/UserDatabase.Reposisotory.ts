@@ -43,6 +43,17 @@ export default class UserDatabaseRepository implements UserRepositoryInterface {
   }
 
   async deleteAccount(userId: string): Promise<void> {
-    await this.connection.query(`DELETE FROM public.user WHERE id = $1`, [userId]);
+    await this.connection.query(
+      `
+      WITH deleted_messages AS (
+      DELETE FROM public.message WHERE contact_id = $1
+      ),
+      deleted_contacts AS (
+      DELETE FROM public.contact WHERE contact_id = $1
+      )
+      DELETE FROM public.user WHERE id = $1;
+      `,
+      [userId]
+    );
   }
 }
