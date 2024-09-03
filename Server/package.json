@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest",
     "dev": "tsx watch --env-file=.env src/infra/http/main.ts",
-    "migrate": "tsx --env-file=.env ./Migrate.ts",
+    "migration": "tsx --env-file=.env ./Migrate.ts",
     "build": "tsc",
     "start": "node --env-file=.env dist/src/infra/http/main.js"
   },
