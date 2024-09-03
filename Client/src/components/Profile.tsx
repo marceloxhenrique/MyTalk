@@ -14,7 +14,7 @@ import { AuthContext } from "@/contexts/AuthContext";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { User } from "lucide-react";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import z from "zod";
@@ -27,6 +27,7 @@ const schemaUpdateUser = z.object({
 });
 
 export function Profile() {
+  const [open, setOpen] = useState(false);
   const user = useContext(AuthContext);
   type NewUserName = z.infer<typeof schemaUpdateUser>;
   const {
@@ -39,6 +40,7 @@ export function Profile() {
 
   async function updateUserName(userName: NewUserName) {
     try {
+      console.log("dialog");
       await axios.post(
         `${BACKEND_URL_BASE}/updateuser/${user?.currentUser?.id}`,
         { userName },
@@ -52,6 +54,7 @@ export function Profile() {
           userName: userName.newUserName,
         });
       }
+      setOpen(false);
       toast.success("User name update successfuly!");
     } catch (error) {
       console.error(error);
@@ -59,7 +62,7 @@ export function Profile() {
     }
   }
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger
         asChild
         className="w-full items-center rounded-sm p-1.5 text-sm font-normal hover:bg-primaryColorlt"

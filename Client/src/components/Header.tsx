@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Profile } from "./Profile";
+import { Settings } from "./Settings";
 
 const BACKEND_URL_BASE = import.meta.env.VITE_BACKEND_URL_BASE;
 
@@ -44,6 +45,9 @@ export const Header = () => {
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <Profile />
+          </DropdownMenuGroup>
+          <DropdownMenuGroup>
+            <Settings />
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={handleLogout} className="font-normal">

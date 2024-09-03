@@ -9,6 +9,7 @@ import UserLogout from "./UserLogout";
 import { UpdateUser } from "./UpdateUser.usecase";
 import { ContactRepositoryInterface } from "../../domain/contact/Contact.repository";
 import AddDefaultContact from "../contact/AddDefaultContact";
+import DeleteAcount from "./DeleteAccount";
 
 export default class UserController {
   constructor(
@@ -130,6 +131,32 @@ export default class UserController {
           return res.status(401).json({ message: "Unauthorized" });
         }
         res.status(404).json({ message: "User not found" });
+      }
+    });
+    httpServer.on("post", "/api/deleteaccount", async (req, res) => {
+      try {
+        const token = req.cookies.MyTalk_Token;
+        const userLogout = new UserLogout(tokenService);
+        userLogout.execute(token);
+        const deleteAccount = new DeleteAcount(userDatabaseRepository);
+        const userId: string = req.body.userId;
+        deleteAccount.execute(userId);
+        res
+          .clearCookie("MyTalk_Token", {
+            httpOnly: true,
+            secure: true,
+            sameSite: "None",
+          })
+          .clearCookie("Mytalk_Refresh_Token", {
+            httpOnly: true,
+            secure: true,
+            sameSite: "None",
+          })
+          .status(200)
+          .json({ message: "Account deleted" });
+      } catch (error) {
+        console.error(error);
+        res.status(401).json({ message: "Account could not be deleted" });
       }
     });
 
